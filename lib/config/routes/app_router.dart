@@ -111,7 +111,7 @@ class AppRouter {
         //     builder: (_) => const ProductInvoice());
         case '/productInvoice':
           return MaterialPageRoute(
-            builder: (_) => ProductInvoice(),
+            builder: (_) => const ProductInvoice(),
           );
 
       case '/productEdite':

@@ -185,11 +185,7 @@ import 'dart:async';
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../bloc/cart/add_to_cart_bloc.dart';
-import '../bloc/cart/add_to_cart_state.dart';
-
 
 
 
@@ -410,7 +406,7 @@ class _PrintParamState extends State<PrintParam> {
                               tips = result ? 'Impression réussie' : 'Échec de l\'impression';
                             });
                           } : null,
-                          child: Text('print test'),
+                          child: const Text('print test'),
                         ),
 
                       ],

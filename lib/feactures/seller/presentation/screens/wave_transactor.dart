@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:omega_caisse/feactures/products/presentation/screens/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../../../../core/common/widgets/CustomSnackBar.dart';
 import '../../../../core/common/widgets/call_options.dart';
 import '../../../../core/common/widgets/input_custom.dart';
@@ -46,8 +45,6 @@ class _WaveTransactorState extends State<WaveTransactor> {
   // Créez une instance de la classe CallOption
   CallOption callOption = CallOption();
 
-  //late WebViewController _controller;
-  late NavigationRequest request;
 
   
   @override

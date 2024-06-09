@@ -183,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ) :
             const SizedBox(),
-            profile == profileSeller && isNotified == "true" ?
+            profile == profileSeller && isNotified == "false" ?
             Column(
               children: [
                 Padding(
