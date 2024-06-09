@@ -18,6 +18,7 @@ import 'feactures/products/presentation/bloc/product/update/product_update_bloc.
 import 'feactures/products/presentation/bloc/solde/product_bloc.dart';
 import 'feactures/seller/presentation/bloc/history/history_bloc.dart';
 import 'feactures/seller/presentation/bloc/order/order_bloc.dart';
+import 'feactures/seller/presentation/bloc/payment/payment_bloc.dart';
 import 'feactures/supervisor/presentation/bloc/supervisor_bloc.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ void main() async {
   await GetStorage.init();
 
   runApp(const MyApp());
+
 }
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<OrderBloc>(create: (BuildContext context) => OrderBloc()),
         BlocProvider<SupervisorBloc>(create: (BuildContext context) => SupervisorBloc()),
         BlocProvider<HandlePasswordBloc>(create: (BuildContext context) => HandlePasswordBloc()),
+        BlocProvider<PaymentBloc>(create: (BuildContext context) => PaymentBloc()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, state) {
@@ -59,6 +62,7 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             initialRoute: '/',
             onGenerateRoute: AppRouter().onGenerateRoute,
+
           );
         },
       ),

@@ -60,7 +60,16 @@
 
 
 
-
+<key>LSApplicationQueriesSchemes</key>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>https</string>
+  <string>http</string>
+  <string>mailto</string>
+  <string>tel</string>
+  <string>sms</string>
+  <string>file</string>
+</array>
     	    <key>NSBluetoothAlwaysUsageDescription</key>
             <string>Need BLE permission</string>
             <key>NSBluetoothPeripheralUsageDescription</key>

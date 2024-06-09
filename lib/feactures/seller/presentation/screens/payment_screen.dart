@@ -31,17 +31,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
                           // Action à effectuer lors du tap sur le conteneur
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled:
-                            true, // Permet au contenu de prendre autant de place que nécessaire
-                            builder: (_) {
-                              return const SizedBox(
-                                  child: WaveTransactor());
-                            },
-                          );
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed("/waveTransactor");
+
 
                         },
                     child: Container(
@@ -77,17 +70,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-
-                      // Action à effectuer lors du tap sur le conteneur
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled:
-                        true, // Permet au contenu de prendre autant de place que nécessaire
-                        builder: (_) {
-                          return const SizedBox(
-                              child: OrangeTransactor());
-                        },
-                      );
+                      Navigator.of(context).pushNamed("/orangeTransactor");
 
                     },
                     child: Container(

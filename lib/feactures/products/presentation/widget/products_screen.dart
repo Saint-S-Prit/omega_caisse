@@ -37,7 +37,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
   List<ProductModel> filteredProducts = [];
 
   String? idClient;
+  String? isSubscription;
+  String? isNotified;
   bool showBalance = false;
+
+
 
   //   // Exemple to get null
   ProductModel productModelNullValue = ProductModel(
@@ -48,13 +52,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
     description: "",
   );
 
+
+
   @override
   void initState() {
     super.initState();
+
     searchController = TextEditingController();
     idClient = SharedPreferencesService.getId();
-  }
+    isNotified = SharedPreferencesService.getIsNotified();
 
+  }
   @override
   void dispose() {
     searchController.dispose();
@@ -63,7 +71,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return
+      //isSubscription == "false" ?
+
+      MultiBlocProvider(
       providers: [
         BlocProvider<ProductBloc>(
             create: (BuildContext context) => ProductBloc()
@@ -437,5 +448,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
         },
       ),
     );
+
   }
 }
+
+
+

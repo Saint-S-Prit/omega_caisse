@@ -94,8 +94,7 @@ class AppRouter {
             builder: (_) => const OrangeTransactor());
 
 
-
-      case '/WaveTransactor':
+      case '/waveTransactor':
         return MaterialPageRoute(
             builder: (_) => const WaveTransactor());
 

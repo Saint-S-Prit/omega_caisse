@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:omega_caisse/feactures/products/presentation/widget/product_command.dart';
+import '../../../../core/services/storage/SharedPreferencesService.dart';
 import '../../../../core/utils/constants/app_constants.dart';
 import '../../../../core/utils/functions.dart';
 import '../../../../core/utils/styles/color.dart';
 import '../bloc/cart/add_to_cart_bloc.dart';
 import '../bloc/cart/add_to_cart_state.dart';
-
 
 
 class ProductScreenAppbar extends StatelessWidget {
@@ -16,16 +16,41 @@ class ProductScreenAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String? isNotified = SharedPreferencesService.getIsNotified();
+
+
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         return Row(
+          children: [
+
+          Stack(
+          clipBehavior: Clip.none,
           children: [
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pushNamed("/profileScreen");
               },
-              child: Icon(Icons.menu, color: appPrincipalColor,),
+              child:  Icon(Icons.menu, color: appPrincipalColor, size: 30), // Use your appPrincipalColor here
             ),
+            isNotified == "true" ?
+            Positioned(
+              right: -2, // Adjust the position as needed
+              top: -2,   // Adjust the position as needed
+              child: Container(
+                width: 13, // Adjust the size as needed
+                height: 13, // Adjust the size as needed
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ) : const SizedBox(),
+          ],
+        ),
+
+
             const Spacer(),
             Text(
               applicationName,

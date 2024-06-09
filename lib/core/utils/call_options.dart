@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallOption {
@@ -18,6 +19,7 @@ class CallOption {
       throw 'Could not launch $phoneNumber';
     }
   }
+  // function url
 
    // Fonction pour ouvrir l'application Gmail avec un e-mail spécifique prérempli
    void openGmail(String email) async {
@@ -33,4 +35,29 @@ class CallOption {
      }
    }
 
+
+
+  // Fonction pour ouvrir une URL spécifique
+  // void openUrl(String url) async {
+  //   if (!await launch(
+  //     url,
+  //     forceWebView: true,
+  //     enableJavaScript: true,
+  //   )) throw 'Could not launch $url';
+  // }
+
+
+   void openApp(String url) {
+     launchUrl(
+       Uri.parse(
+         url, //put your number here
+       ),
+     );
+   }
 }
+
+
+
+
+
+

@@ -10,7 +10,8 @@ import '../../../feactures/authentication/presentation/bloc/logout/logout_state.
 import '../../../feactures/products/presentation/bloc/cart/add_to_cart_bloc.dart';
 import '../../../feactures/products/presentation/bloc/cart/add_to_cart_state.dart';
 import '../../../feactures/products/presentation/widget/print_param.dart';
-import 'call_options.dart';
+
+import '../../utils/call_options.dart';
 import 'separator.dart';
 import '../../services/storage/SharedPreferencesService.dart';
 import '../../utils/constants/app_constants.dart';
@@ -33,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? team;
   String? category;
   String? profile;
+  String? isNotified;
 
   @override
   void initState() {
@@ -44,12 +46,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     profile =   SharedPreferencesService.getProfile();
     team =   SharedPreferencesService.getTeam();
     category =   SharedPreferencesService.getCategory();
+    isNotified = SharedPreferencesService.getIsNotified();
   }
+
+
+
 
 
   // Créez une instance de la classe CallOption
   CallOption callOption = CallOption();
-
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ) :
             const SizedBox(),
-            profile == profileSeller ?
+            profile == profileSeller && isNotified == "true" ?
             Column(
               children: [
                 Padding(

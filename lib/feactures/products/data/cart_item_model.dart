@@ -4,7 +4,6 @@ class CartItemModel {
   final int price;
   final String? unity;
   late num quantity;
-   //late  num quantity; // Modifié le type de la propriété quantity
   final String path;
 
   CartItemModel({

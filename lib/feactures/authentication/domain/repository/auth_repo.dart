@@ -29,9 +29,13 @@ class AuthenticationRepository {
 
         final jsonResponse = jsonDecode(response.body);
 
+
+
         // Décoder les données utilisateur
         //final user = UserResponse.fromJson(jsonResponse);
         final user = jsonResponse['data'];
+
+
         await SharedPreferencesService.setId(user['id'].toString());
         await SharedPreferencesService.setPassword(password);
         await SharedPreferencesService.setToken(user['token'].toString());
@@ -66,8 +70,6 @@ class AuthenticationRepository {
         "Authorization": "Bearer $token",
       }
       );
-
-      print(response.statusCode);
 
       if (response.statusCode == 200) {
         return "200";
