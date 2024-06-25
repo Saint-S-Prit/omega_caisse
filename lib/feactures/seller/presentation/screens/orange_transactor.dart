@@ -22,27 +22,29 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
 
   @override
   Widget build(BuildContext context) {
+
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     return BlocProvider(
       create: (context) => PaymentBloc(),
-      child: Scaffold(
-        backgroundColor: appWhiteColor,
-        appBar: AppBar(),
-        body: SingleChildScrollView(
+      child: Padding(
+        padding: mediaQueryData.viewInsets,
+        child: SingleChildScrollView(
           child: BlocListener<PaymentBloc, PaymentState>(
             listener: (context, state) async {
               if (state is PaymentOrangeLoaderState) {
-                if (state.paymentResponse.success) {
+                if (state.paymentResponse["success"] == true) {
                   showSuccessDialog(
                     context,
                     'Succès',
-                    'Votre paiement a été effectué avec succès!',
+                    state.paymentResponse["message"].toString(),
                     const HomeScreen(), // Remplacez par le widget de votre écran d'accueil
                   );
                 } else {
                   showErrorDialog(
                     context,
                     'Erreur',
-                    "Assurez-vous d'avoir saisi un numéro valable et ayant assez de fonds!",
+                    state.paymentResponse["message"].toString(),
                   );
                 }
               } else if (state is PaymentErrorState) {
@@ -61,14 +63,14 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
-                      child: Image.asset(
-                        "assets/logo.png",
-                        height: 200,
-                        width: 200,
-                      ),
-                    ),
-                    const SizedBox(height: 50),
+                    // SizedBox(
+                    //   child: Image.asset(
+                    //     "assets/logo.png",
+                    //     height: 200,
+                    //     width: 200,
+                    //   ),
+                    // ),
+                    const SizedBox(height: 20),
                     InputCustom(
                       keyboardType: TextInputType.number,
                       controller: phoneNumber,
@@ -96,8 +98,9 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
                         color: Colors.black,
                       ),
                     ),
+                    const SizedBox(height: 5),
                     InputCustom(
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.number,
                       controller: ussdCode,
                       labelText: "Code secret",
                       prefixIcon: Icons.code,
@@ -136,6 +139,8 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
                         }
                       },
                     ),
+                    const SizedBox(height: 20),
+
                   ],
                 ),
               ),
@@ -146,7 +151,6 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
     );
   }
 }
-
 
 void showSuccessDialog(BuildContext context, String title, String description, Widget redirectTo) {
   showDialog(
@@ -181,7 +185,7 @@ void showErrorDialog(BuildContext context, String title, String description) {
         content: Text(description),
         actions: [
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () {
               Navigator.of(context).pop(); // Fermer le popup
             },

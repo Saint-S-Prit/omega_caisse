@@ -172,16 +172,21 @@ class AuthenticationRepository {
     } else {
       var day = Format.formatDate2(DateTime.now());
       TimeOfDay now = TimeOfDay.now();
-      TimeOfDay releaseTime = const TimeOfDay(hour: 4, minute: 59);
+      TimeOfDay releaseTime = const TimeOfDay(hour: 6, minute: 00);
 
-      var endDate = "$day ${now.hour}:${now.minute}:59";
+      var endDate = "$day ${now.hour}:${now.minute}}";
       var startDate = '';
-      if (now.hour < 4) {
+
+
+
+
+      if (now.hour < 6) {
         var day1 = Format.formatDate2(DateTime.now().subtract(const Duration(days: 1)));
-        startDate = "$day1 ${releaseTime.hour}:${releaseTime.minute}:59";
+        startDate = "$day1 ${releaseTime.hour}:${releaseTime.minute}";
       } else {
-        startDate = "$day ${releaseTime.hour}:${releaseTime.minute}:59";
+        startDate = "$day ${releaseTime.hour}:${releaseTime.minute}";
       }
+
       var url = Uri.https(baseUrl, '/api/user/$id/balance/$startDate/$endDate');
       var headers = {'Authorization': 'Bearer $token'};
       var response = await http.get(
@@ -189,9 +194,6 @@ class AuthenticationRepository {
         headers: headers,
       );
       var body = jsonDecode(response.body);
-      //print("balanceeee");
-      //print(body);
-      //print("balanceeee");
       return body['balance'].toString();
     }
   }

@@ -11,7 +11,9 @@ final localStorageSecurity = LocalStorageSecurity();
 
 class PaymentRepo {
 
-  late PaymentModel paymentResponse ;
+  late Map<String, dynamic> paymentResponse;
+
+  late PaymentModel paymentResponss;
 
   String token = SharedPreferencesService.getToken().toString();
 
@@ -40,19 +42,19 @@ try {
       PaymentModel paymentResponses = PaymentModel.fromJson(responseBody);
 
 
-      return paymentResponse = paymentResponses;
+      return paymentResponss = paymentResponses;
     }
     else
       {
-        return paymentResponse;
+        return paymentResponss;
       }
   } catch (e) {
-    return paymentResponse;
+    return paymentResponss;
   }
   }
 
 
-  Future<PaymentModel> payedByOrange({required String phone, required String ussdCode}) async {
+  Future<Map<String, dynamic>> payedByOrange({required String phone, required String ussdCode}) async {
 
 
 
@@ -74,22 +76,41 @@ try {
 
       //final response = await get(Uri.parse('$baseUrl/professions'));
       if (response.statusCode == 200) {
-
-        print("********************");
+        print("********ééééééé************");
         print(response.body);
-        print("********************");
+        print("**********éééééé**********");
 
 
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        PaymentModel paymentResponses = PaymentModel.fromJson(responseBody);
-        return paymentResponse = paymentResponses;
+
+        print("*****responseBody******");
+        print(responseBody);
+        print("*****responseBody******");
+
+        //PaymentModel paymentResponses = PaymentModel.fromJson(responseBody);
+
+        Map<String, dynamic> paymentResponses = {
+          'success': responseBody["success"],
+          'message': responseBody["data"]["message"]
+        };
+
+        return paymentResponse = paymentResponses ;
       }
       else
       {
-        return paymentResponse;
+        Map<String, dynamic> paymentResponses = {
+          'success': false,
+          'message': "Une erreur s'est produite, Ressayez plus tard"
+        };
+
+        return paymentResponse = paymentResponses ;
       }
     } catch (e) {
-      return paymentResponse;
+      Map<String, dynamic> paymentResponses = {
+        'success': false,
+        'message': "Une erreur s'est produite, Ressayez plus tard"
+      };
+      return paymentResponse = paymentResponses ;
     }
   }
 

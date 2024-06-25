@@ -54,7 +54,7 @@ class _HistoriesSupervisorScreenState extends State<HistoriesSupervisorScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(
             Icons.close,
@@ -214,7 +214,7 @@ class _HistoriesSupervisorScreenState extends State<HistoriesSupervisorScreen> {
                                           .toString(); // Mise à jour de endDay
 
                                       showSelectedOptionName =
-                                      "${Functions.getWeekRangeWithoutHour()} - ${Functions.getTodayDateWithoutHour()}";
+                                      "${Functions.getWeekRangeWithoutHour()}      -       ${Functions.getTodayDateWithoutHour()}";
                                       updateHistoryList(context);
                                     });
                                   },
@@ -289,52 +289,6 @@ class _HistoriesSupervisorScreenState extends State<HistoriesSupervisorScreen> {
                                     });
                                   },
 
-
-
-                                  //
-                                  // {
-                                  //   showHoloDatePicker(
-                                  //     context,
-                                  //     title: "Date de début",
-                                  //     initialDateTime: customStartDate,
-                                  //   ).then((pickedStartDate) {
-                                  //     if (pickedStartDate != null) {
-                                  //       showHoloDatePicker(
-                                  //         context,
-                                  //         title: "Date de fin", // Ajouter un titre pour la date de fin
-                                  //         initialDateTime: customEndDate,
-                                  //       ).then((pickedEndDate) {
-                                  //         if (pickedEndDate != null) {
-                                  //           setState(() {
-                                  //             customStartDate = DateTime(
-                                  //               pickedStartDate.year,
-                                  //               pickedStartDate.month,
-                                  //               pickedStartDate.day,
-                                  //               0,
-                                  //               0,
-                                  //             );
-                                  //             customEndDate = DateTime(
-                                  //               pickedEndDate.year,
-                                  //               pickedEndDate.month,
-                                  //               pickedEndDate.day,
-                                  //               23,
-                                  //               59,
-                                  //             );
-                                  //
-                                  //             widget.startDay = "${customStartDate.year}-${customStartDate.month.toString().padLeft(2, '0')}-${customStartDate.day.toString().padLeft(2, '0')} 04:59:59";
-                                  //             widget.endDay = "${customEndDate.year}-${customEndDate.month.toString().padLeft(2, '0')}-${customEndDate.day.toString().padLeft(2, '0')} 23:49:59";
-                                  //
-                                  //             showSelectedOptionName = "${customStartDate.day.toString().padLeft(2, '0')}-${customStartDate.month.toString().padLeft(2, '0')}-${customStartDate.year} au ${customEndDate.day.toString().padLeft(2, '0')}-${customEndDate.month.toString().padLeft(2, '0')}-${customEndDate.year}";
-                                  //
-                                  //             selectedOption = "Personnaliser";
-                                  //             //showSelectedOptionName = "Personnaliser";
-                                  //             updateHistoryList(context); // Call updateHistoryList here
-                                  //           });
-                                  //         }
-                                  //       });
-                                  //     }
-                                  //   });
-                                  // },
                                 ),
 
                               ],

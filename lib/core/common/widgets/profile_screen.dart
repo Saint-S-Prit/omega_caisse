@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:omega_caisse/feactures/authentication/presentation/bloc/login/login_event.dart';
 import '../../../feactures/Seller/presentation/screens/payment_screen.dart';
-import '../../../feactures/authentication/presentation/bloc/login/login_bloc.dart';
-import '../../../feactures/authentication/presentation/bloc/login/login_state.dart';
 import '../../../feactures/authentication/presentation/bloc/logout/logout_bloc.dart';
 import '../../../feactures/authentication/presentation/bloc/logout/logout_event.dart';
 import '../../../feactures/authentication/presentation/bloc/logout/logout_state.dart';
 import '../../../feactures/products/presentation/bloc/cart/add_to_cart_bloc.dart';
 import '../../../feactures/products/presentation/bloc/cart/add_to_cart_state.dart';
-import '../../../feactures/products/presentation/widget/print_param.dart';
 
 import '../../utils/call_options.dart';
 import 'separator.dart';
@@ -47,6 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     team =   SharedPreferencesService.getTeam();
     category =   SharedPreferencesService.getCategory();
     isNotified = SharedPreferencesService.getIsNotified();
+
   }
 
 
@@ -55,6 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Créez une instance de la classe CallOption
   CallOption callOption = CallOption();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,23 +182,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ) :
             const SizedBox(),
-            profile == profileSeller && isNotified == "false" ?
+            GestureDetector(
+              onTap: (){
+                Navigator.of(context).pushNamed("/printParam");
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: appPrincipalColor.withOpacity(0.2),
+                              // red as border color
+                            ),
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                          ),
+                          child: Icon(
+                            Icons.print,
+                            color: appPrincipalColor,
+                          )),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: appPrincipalColor,
+                      ),
+                      title: const Text(
+                        "Imprimente",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            profile == profileSeller && isNotified == "true" ?
             Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: GestureDetector(
+                  child:
+
+                  GestureDetector(
                     onTap: () {
+
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled:
                             true, // Permet au contenu de prendre autant de place que nécessaire
-                        builder: (BuildContext context) {
-                          return SizedBox(
+                        builder: (_) {
+                          return const SizedBox(
                               // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
-                              height: MediaQuery.of(context).size.height *
-                                  0.3, // Définir la hauteur souhaitée
-                              child: const PaymentScreen());
+                              //height: MediaQuery.of(context).size.height *
+                                  //0.3, // Définir la hauteur souhaitée
+                              child: PaymentScreen());
                         },
                       );
                     },
@@ -217,59 +256,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(15)),
                               ),
-                              child: Icon(
-                                Icons.attach_money_rounded,
-                                color: appPrincipalColor,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Icon(
+                                    Icons.attach_money_rounded,
+                                    color: appPrincipalColor,
+                                  ),
+                                  isNotified == "true" ?
+                                  Positioned(
+                                    right: -13, // Adjust the position as needed
+                                    top: -13,   // Adjust the position as needed
+                                    child: Container(
+                                      width: 13, // Adjust the size as needed
+                                      height: 13, // Adjust the size as needed
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ) : const SizedBox(),
+                                  ],
+                                ),
+
+
+                                ],
                               )),
                           trailing: Icon(
                             Icons.arrow_forward_ios,
                             color: appPrincipalColor,
                           ),
                           title: const Text(
-                            "Payment",
+                            "Payement",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-
-                GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).pushNamed("/printParam");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: Column(
-                        children: [
-                          ListTile(
-                            leading: Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: appPrincipalColor.withOpacity(0.2),
-                                    // red as border color
-                                  ),
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(15)),
-                                ),
-                                child: Icon(
-                                  Icons.print,
-                                  color: appPrincipalColor,
-                                )),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: appPrincipalColor,
-                            ),
-                            title: const Text(
-                              "Imprimente",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
                   ),
                 ),
               ],
@@ -286,7 +312,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: GestureDetector(
         onTap: () async {
-          callOption.whatsApp(appPhoneNumber);
+          //callOption.whatsApp(appPhoneNumber);
+          callOption.whatsAppOrCall(appPhoneNumber);
         },
         child: Column(
           children: [

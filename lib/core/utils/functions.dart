@@ -37,7 +37,6 @@ class Functions {
     final startOfWeek = now.subtract(Duration(days: now.weekday)); // Premier jour de la semaine (lundi)
     final startOfWeekAt5 = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day, 5, 0); // Lundi à 5h00
 
-    print(startOfWeekAt5.toString());
     return startOfWeekAt5.toString();
   }
 

@@ -134,9 +134,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           child: GestureDetector(
-                            onTap: () async {
-                              callOption.whatsApp(appPhoneNumber);
-                            },
+                              onTap: () async {
+                                callOption.whatsAppOrCall(appPhoneNumber);
+                                //bool test = await callOption.whatsApp(appPhoneNumber);
+                                // bool test = false;
+                                // if (!test) {
+                                //   callOption.makePhoneCall(appPhoneNumber);
+                                // }
+                              },
                             child: const Text(
                               "Mot de passe oublié",
                             )

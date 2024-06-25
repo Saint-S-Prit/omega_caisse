@@ -14,7 +14,7 @@ class PaymentLoadingState extends PaymentState {
 }
 
 class PaymentOrangeLoaderState extends PaymentState {
-  final PaymentModel paymentResponse;
+  final Map<String, dynamic> paymentResponse;
   PaymentOrangeLoaderState(this.paymentResponse);
   @override
   List<Object> get props => [];

@@ -184,18 +184,19 @@ class _SupervisorScreenState extends State<SupervisorScreen> {
   // Widget builds the display item with the proper formatting to display the user's info
   Widget buildTeamSupervisorDisplay(SupervisorModel supervisorModel) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: appPrincipalColor.withOpacity(0.2),
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-        ),
+        // decoration: BoxDecoration(
+        //   border: Border.all(
+        //     color: appPrincipalColor.withOpacity(0.2),
+        //   ),
+        //   borderRadius: const BorderRadius.all(Radius.circular(15)),
+        // ),
+        decoration: TextStyles.customBoxDecoration(context),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

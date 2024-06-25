@@ -55,20 +55,20 @@ class SupervisorRepository {
     if ((startDay == null || startDay.isEmpty) && (endDay == null || endDay.isEmpty)) {
       var day = Validation.formatDateYYYMMdd(DateTime.now());
       TimeOfDay now = TimeOfDay.now();
-      TimeOfDay releaseTime = const TimeOfDay(hour: 4, minute: 59);
+      TimeOfDay releaseTime = const TimeOfDay(hour: 6, minute: 00);
 
       var h = now.hour.toString().padLeft(2, '0');
       var m = now.minute.toString().padLeft(2, '0');
 
       var endDate = "$day $h:$m:59";
       var startDate = '';
-      if (now.hour < 4) {
+      if (now.hour < 6) {
         var day1 = Validation.formatDateYYYMMdd(DateTime.now().subtract(const Duration(days: 1)));
         var h1 = releaseTime.hour.toString().padLeft(2, '0');
-        startDate = "$day1 $h1:${releaseTime.minute.toString().padLeft(2, '0')}:59";
+        startDate = "$day1 $h1:${releaseTime.minute.toString().padLeft(2, '0')}:00";
       } else {
         var h2 = releaseTime.hour.toString().padLeft(2, '0');
-        startDate = "$day $h2:${releaseTime.minute.toString().padLeft(2, '0')}:59";
+        startDate = "$day $h2:${releaseTime.minute.toString().padLeft(2, '0')}:00";
       }
 
       formattedStartDate = startDate.replaceAll(' ', '-');
@@ -77,6 +77,7 @@ class SupervisorRepository {
       formattedStartDate = startDay!.replaceAll(' ', '-');
       formattedEndDate = endDay!.replaceAll(' ', '-');
     }
+
 
 // Construire l'URL avec les dates formatées
 

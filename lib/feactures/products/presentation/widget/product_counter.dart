@@ -3,15 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:omega_caisse/core/utils/validation.dart';
 import '../../../../core/common/widgets/submit_button_custom.dart';
 import '../../../../core/services/storage/SharedPreferencesService.dart';
 import '../../../../core/utils/animated_toggle.dart';
 import '../../../../core/utils/constants/app_constants.dart';
-import '../../../../core/utils/functions.dart';
 import '../../../../core/utils/styles/color.dart';
-import '../../../seller/presentation/bloc/order/order_bloc.dart';
-import '../../../seller/presentation/bloc/order/order_event.dart';
 import '../../data/cart_item_model.dart';
 import '../../data/product_model.dart';
 import '../../services/cardService.dart';
@@ -234,7 +230,7 @@ class _ProductCounterState extends State<ProductCounter> {
                   },
                   textSubmit: "Ajouter",
                 ) :
-                    SizedBox()
+                    const SizedBox()
               ],
             ),
           )

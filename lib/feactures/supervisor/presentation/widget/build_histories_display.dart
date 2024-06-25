@@ -12,6 +12,7 @@ class BuildHistoriesDisplay extends StatelessWidget {
   // Constructor to initialize orderList and appPrincipalColor
   const BuildHistoriesDisplay({Key? key, required this.orderList}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:omega_caisse/core/common/widgets/no_service_found.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../../core/common/widgets/input_custom.dart';
 import '../../../../core/utils/styles/color.dart';
@@ -31,12 +30,12 @@ class _HistoriesSellerScreenState extends State<HistoriesSellerScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(
             Icons.close,

@@ -16,15 +16,12 @@ class ProductScreenAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     String? isNotified = SharedPreferencesService.getIsNotified();
-
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         return Row(
           children: [
-
           Stack(
           clipBehavior: Clip.none,
           children: [

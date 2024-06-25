@@ -223,8 +223,7 @@ class _ProductCommandState extends State<ProductCommand> {
                                                 },
                                                 icon: const Icon(Icons.remove),
                                               ),
-                                              Text(Validation.formatBalance(
-                                                  sommeByProduct)),
+                                              Text(carts.quantity.toString()),
                                               IconButton(
                                                 onPressed: () {
                                                   setState(() {

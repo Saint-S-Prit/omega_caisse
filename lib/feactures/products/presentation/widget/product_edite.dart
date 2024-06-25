@@ -25,27 +25,25 @@ class _ProductEditeState extends State<ProductEdite> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 
-  late FocusNode myFocusNode;
+
+
+
+  late FocusNode _nameFocusNode;
+  late FocusNode _priceFocusNode;
 
   @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
-    nameProductController.clear();
-    priceProductController.clear();
-
-
-    nameProductController.text = widget.product.name.toString();
-    priceProductController.text = widget.product.price.toString();
+    _nameFocusNode = FocusNode();
+    _priceFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
+    _nameFocusNode.dispose();
+    _priceFocusNode.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +53,6 @@ class _ProductEditeState extends State<ProductEdite> {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     return Padding(
-      //padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
       padding: mediaQueryData.viewInsets,
       child: SingleChildScrollView(
         child: BlocListener<ProductUpdateBloc, UpdateProductState>(
@@ -71,9 +68,9 @@ class _ProductEditeState extends State<ProductEdite> {
               }
             }
           },
-        
+
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
             child: Form(
               key: formKey,
               child: Column(
@@ -172,3 +169,5 @@ class _ProductEditeState extends State<ProductEdite> {
     );
   }
 }
+
+

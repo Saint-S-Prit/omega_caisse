@@ -323,63 +323,64 @@ class _ProductInvoiceState extends State<ProductInvoice> {
                                                             type: LineText
                                                                 .TYPE_TEXT,
                                                             x: 10,
-                                                            y: 130,
-                                                            content:
-                                                                '----------------------------'));
+                                                              y: 130,
+                                                              content:
+                                                                  '----------------------------'));
 
-                                                        int yPosition =
-                                                            170; // Initial y position for items
-                                                        for (var cartItem
-                                                            in state
-                                                                .cartItems) {
+                                                          int yPosition =
+                                                              170; // Initial y position for items
+                                                          for (var cartItem
+                                                              in state
+                                                                  .cartItems) {
+                                                            lines.add(LineText(
+                                                              type: LineText
+                                                                  .TYPE_TEXT,
+                                                              x: 10,
+                                                              y: yPosition,
+                                                              content:
+                                                                  '${cartItem.quantity}${cartItem.unity ?? null}x${cartItem.name}',
+                                                            ));
+
+                                                            int pricePositionX =
+                                                                labelWidthDpi -
+                                                                    140; // Ajustez 140 selon les besoins
+
+                                                            lines.add(LineText(
+                                                              type: LineText
+                                                                  .TYPE_TEXT,
+                                                              x: pricePositionX,
+                                                              y: yPosition,
+                                                              content:
+                                                                  '${Validation.formatBalance(cartItem.price * cartItem.quantity)} XOF',
+                                                            ));
+
+                                                            yPosition +=
+                                                                20; // Increment y position for next item
+                                                          }
+
                                                           lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: yPosition,
-                                                            content:
-                                                                '${cartItem.quantity}x${cartItem.name}',
-                                                          ));
-
-                                                          int pricePositionX =
-                                                              labelWidthDpi -
-                                                                  140; // Ajustez 140 selon les besoins
-
-                                                          lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: pricePositionX,
-                                                            y: yPosition,
-                                                            content:
-                                                                '${Validation.formatBalance(cartItem.price * cartItem.quantity)} XOF',
-                                                          ));
+                                                              type: LineText
+                                                                  .TYPE_TEXT,
+                                                              x: 10,
+                                                              y: yPosition,
+                                                              content:
+                                                                  '---------------------------'));
 
                                                           yPosition +=
-                                                              20; // Increment y position for next item
-                                                        }
+                                                              20; // Increment y position for total
+                                                          num total = state
+                                                              .cartItems
+                                                              .fold(
+                                                                  0,
+                                                                  (sum, item) =>
+                                                                      sum +
+                                                                      (item.price *
+                                                                          item.quantity),);
 
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: yPosition,
-                                                            content:
-                                                                '---------------------------'));
-
-                                                        yPosition +=
-                                                            20; // Increment y position for total
-                                                        num total = state
-                                                            .cartItems
-                                                            .fold(
-                                                                0,
-                                                                (sum, item) =>
-                                                                    sum +
-                                                                    (item.price *
-                                                                        item.quantity));
-
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
+                                                          lines.add(
+                                                                                                      LineText(
+                                                              type: LineText
+                                                                      .TYPE_TEXT,
                                                             x: 10,
                                                             y: yPosition,
                                                             weight: 5,

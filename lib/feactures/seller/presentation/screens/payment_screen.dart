@@ -15,9 +15,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appWhiteColor,
-      body: SingleChildScrollView(
+
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    return Padding(
+      padding: mediaQueryData.viewInsets,
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
           child: Column(
@@ -33,7 +36,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         onTap: () {
                           // Action à effectuer lors du tap sur le conteneur
                           Navigator.of(context).pop();
-                          Navigator.of(context).pushNamed("/waveTransactor");
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+                            builder: (_) {
+                              return const SizedBox(
+                                // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
+                                //height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
+                                child: WaveTransactor(),
+                              );
+                            },
+                          );
+
 
 
                         },
@@ -70,8 +84,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed("/orangeTransactor");
-
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+                        builder: (_) {
+                          return const SizedBox(
+                            // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
+                            //height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
+                            child: OrangeTransactor(),
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       width: 75,
