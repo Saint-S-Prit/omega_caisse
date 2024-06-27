@@ -83,8 +83,6 @@ class SupervisorRepository {
 
     var url = Uri.https(baseUrl, '/api/user/$id/orders/$formattedStartDate/$formattedEndDate');
     //var url = Uri.https(baseUrl, "https://omega.hadjidoro.me/api/user/2/orders/2024-05-26-04:59:59/2024-05-26-22:49:59");
-
-    print(url);
     var response = await http.get(
       url,
       headers: <String, String>{

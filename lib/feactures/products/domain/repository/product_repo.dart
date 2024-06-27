@@ -12,7 +12,33 @@ List<ProductModel> productList = [];
 
 class ProductRepository {
   String token = SharedPreferencesService.getToken().toString();
+  // Future<List<ProductModel>> getProductsByClient({required String id}) async {
+  //   var url = Uri.https(baseUrl, '/api/user/$id/products');
+  //   var headers = {'Authorization': 'Bearer $token'};
+  //
+  //   var response = await http.get(
+  //     url,
+  //     headers: headers,
+  //   );
+  //   //final response = await get(Uri.parse('$baseUrl/professions'));
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> responseBody = jsonDecode(response.body);
+  //     final List<dynamic> dataList = responseBody['data'];
+  //     final List<ProductModel> products =
+  //         dataList.map((json) => ProductModel.fromJson(json)).toList();
+  //
+  //     productList = products;
+  //   }
+  //   return productList;
+  // }
   Future<List<ProductModel>> getProductsByClient({required String id}) async {
+    // Vérifiez si les produits sont déjà enregistrés dans le stockage local
+    List<ProductModel>? cachedProducts = SharedPreferencesService.getProducts();
+    if (cachedProducts != null && cachedProducts.isNotEmpty) {
+      return cachedProducts;
+    }
+
+    // Si non, faites un appel réseau pour les obtenir
     var url = Uri.https(baseUrl, '/api/user/$id/products');
     var headers = {'Authorization': 'Bearer $token'};
 
@@ -20,19 +46,22 @@ class ProductRepository {
       url,
       headers: headers,
     );
-    //final response = await get(Uri.parse('$baseUrl/professions'));
+
+
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> dataList = responseBody['data'];
-      final List<ProductModel> products =
-          dataList.map((json) => ProductModel.fromJson(json)).toList();
+      final List<ProductModel> products = dataList.map((json) => ProductModel.fromJson(json)).toList();
 
-      productList = products;
+      // Sauvegardez les produits dans le stockage local
+      await SharedPreferencesService.setProducts(products);
+
+      return products;
     }
 
-    return productList;
+    // En cas d'erreur, renvoyez une liste vide ou gérez l'erreur comme nécessaire
+    return [];
   }
-
 
   Future<bool> updateProduct({required ProductModel productModel}) async {
 

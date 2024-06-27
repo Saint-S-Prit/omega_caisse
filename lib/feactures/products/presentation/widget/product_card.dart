@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:omega_caisse/core/services/subscription/subscription_service.dart';
 import 'package:omega_caisse/feactures/products/presentation/widget/product_edite.dart';
+import '../../../../core/services/storage/SharedPreferencesService.dart';
 import '../../../../core/utils/constants/api_path.dart';
 import '../../../../core/utils/styles/color.dart';
 import '../../../../core/utils/styles/typo.dart';
@@ -9,22 +13,28 @@ import '../screens/add_product.dart';
 
 class ProductCard extends StatelessWidget {
   final product;
-
   const ProductCard({super.key, required ProductModel this.product});
 
   @override
   Widget build(BuildContext context) {
+
+    final SubscriptionService subscriptionService = SubscriptionService();
+
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await subscriptionService.checkAndUpdateSubscriptionStatus(context);
         showModalBottomSheet(
           context: context,
-          isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+          isScrollControlled:
+              true, // Permet au contenu de prendre autant de place que nécessaire
           builder: (_) {
-            return SizedBox( // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
-              height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
+            return SizedBox(
+              // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
+              height: MediaQuery.of(context).size.height *
+                  0.4, // Définir la hauteur souhaitée
               child: AddProduct(
-              product: product,
-            ),
+                product: product,
+              ),
             );
           },
         );
@@ -43,7 +53,7 @@ class ProductCard extends StatelessWidget {
                       topRight: Radius.circular(10),
                     ),
                     image: DecorationImage(
-                      image: NetworkImage(fileURL +product.path),
+                      image: NetworkImage(fileURL + product.path),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -93,9 +103,11 @@ class ProductCard extends StatelessWidget {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+                      isScrollControlled:
+                          true, // Permet au contenu de prendre autant de place que nécessaire
                       builder: (_) {
-                        return SizedBox( // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
+                        return SizedBox(
+                          // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
                           //height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
                           child: ProductEdite(
                             product: product,
@@ -105,13 +117,17 @@ class ProductCard extends StatelessWidget {
                     );
                   },
                   icon: Container(
-                      decoration:  BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
                         color: appWhiteColor,
                       ),
-                    width: 25,
+                      width: 25,
                       height: 25,
-                      child: const Icon(Icons.edit,size: 18,)),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 18,
+                      )),
                   color: appPrincipalColor, // Couleur de l'icône
                 ),
               ),
@@ -120,6 +136,7 @@ class ProductCard extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
+
+

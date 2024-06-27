@@ -24,6 +24,9 @@ class _HistoriesSellerScreenState extends State<HistoriesSellerScreen> {
 
   late TextEditingController search = TextEditingController();
 
+  final TextEditingController searchController = TextEditingController();
+  List<HistoryModel> filteredHistory = [];
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -81,6 +84,18 @@ class _HistoriesSellerScreenState extends State<HistoriesSellerScreen> {
               }
               if (state is HistoryLoadedState) {
                 List<HistoryModel> orderList = state.orderList;
+
+                if (isSearching) {
+                  filteredHistory = orderList
+                      .where((history) => history.name!
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()))
+                      .toList();
+                } else {
+                  filteredHistory = orderList;
+                }
+
+
                 return  state.orderList.isNotEmpty ?
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -89,28 +104,40 @@ class _HistoriesSellerScreenState extends State<HistoriesSellerScreen> {
                       Padding(
                         padding:
                         const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          height: 50,
-                          width: double.infinity,
-                          decoration: TextStyles.customBoxDecoration(context),
-                          child: InputCustom(
-                            controller: search,
-                            labelText: "Recherche",
-                            prefixIcon: Icons.search,
-                            hintText: "Recherche",
-                            obscureText: false,
-                            validator: (value) {
-                              return null;
-                            },
+                        child: TextField(
+                          style: const TextStyle(color: Colors.black),
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              isSearching = value.isNotEmpty;
+                            });
+                          },
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: appSecondaryColor,
+                            hintText: "Recherche profession",
+                            hintStyle: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                            contentPadding: const EdgeInsets.only(
+                                top:
+                                5), // Padding top de 5 pour le hintText
+                            prefixIcon: Icon(Icons.search,
+                                size: 25, color: appPrincipalColor),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
                       Expanded(
                           child: ListView.builder(
-                            itemCount: orderList.length,
+                            itemCount: filteredHistory.length,
                             itemBuilder: (context, index) {
-                              return buildHistoriesDisplay(orderList[index]);
+                              return buildHistoriesDisplay(filteredHistory[index]);
                             },
                           )
                       ),

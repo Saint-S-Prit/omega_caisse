@@ -23,6 +23,15 @@ class ProductModel {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'path': path,
+      'description': description,
+    };
+  }
   @override
   String toString() {
     return 'Product ID: $id, Name: $name, Price: $price, Path: $path, Description: $description';

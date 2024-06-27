@@ -56,10 +56,8 @@ class _ProductCounterState extends State<ProductCounter> {
     }
   }
 
-
   // Initialiser une liste pour stocker les objets JSON
   List<Map<String, dynamic>> cartItemsJson = [];
-
 
   late TextEditingController _numberController;
   late num _currentNumber;
@@ -68,10 +66,6 @@ class _ProductCounterState extends State<ProductCounter> {
   int _toggleValue = 0;
   bool isMeterSelected = false;
   bool isYardSelected = false;
-
-
-
-
 
   @override
   void dispose() {
@@ -88,10 +82,9 @@ class _ProductCounterState extends State<ProductCounter> {
 
   @override
   Widget build(BuildContext context) {
-
     return SharedPreferencesService.getCategory() != categoryTextile
 
-    // AJOUTER  PRODUITS DIFFERENT DE TISSUS
+        // AJOUTER  PRODUITS DIFFERENT DE TISSUS
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
             child: Column(
@@ -115,7 +108,9 @@ class _ProductCounterState extends State<ProductCounter> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 30.0, vertical: 10),
@@ -143,7 +138,6 @@ class _ProductCounterState extends State<ProductCounter> {
                           icon: const Icon(Icons.remove),
                         ),
                         const SizedBox(width: 10),
-
                         Text(
                           _currentNumber.toString(),
                           style: const TextStyle(
@@ -165,7 +159,9 @@ class _ProductCounterState extends State<ProductCounter> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -185,56 +181,59 @@ class _ProductCounterState extends State<ProductCounter> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
-                _currentNumber > 0 ?
-                SubmitButtonCustom(
-                  onPressed: () {
-                    // Vérifier si le produit est déjà dans le panier
-                    final cartBloc = context.read<CartBloc>();
-                    final currentState = cartBloc.state;
-                    final cartItems = currentState.cartItems;
-                    bool alreadyExists = false;
-                    // Mise à jour de la quantité du produit s'il existe déjà dans le panier
-                    for (var item in cartItems) {
-                      if (item.name.toString() == widget.product.name.toString()) {
-                        alreadyExists = true;
-                        item.quantity += _currentNumber; // Mise à jour de la quantité
-                        CartItemModel cartItemModel = CartItemModel(
-                          id: item.id.toString(),
-                          name: item.name,
-                          price: item.price,
-                          unity: "",
-                          quantity: item.quantity,
-                          path: item.path.isNotEmpty ? item.path : '',
-                        );
-                        cartItems.remove(item);
-                        cartBloc.add(AddToCartEvent(cartItemModel));
-                        Navigator.of(context).pop();
-                      }
-                    }
+                const SizedBox(
+                  height: 10,
+                ),
+                _currentNumber > 0
+                    ? SubmitButtonCustom(
+                        onPressed: () {
+                          // Vérifier si le produit est déjà dans le panier
+                          final cartBloc = context.read<CartBloc>();
+                          final currentState = cartBloc.state;
+                          final cartItems = currentState.cartItems;
+                          bool alreadyExists = false;
+                          // Mise à jour de la quantité du produit s'il existe déjà dans le panier
+                          for (var item in cartItems) {
+                            if (item.name.toString() ==
+                                widget.product.name.toString()) {
+                              alreadyExists = true;
+                              item.quantity +=
+                                  _currentNumber; // Mise à jour de la quantité
+                              CartItemModel cartItemModel = CartItemModel(
+                                id: item.id.toString(),
+                                name: item.name,
+                                price: item.price,
+                                unity: "",
+                                quantity: item.quantity,
+                                path: item.path.isNotEmpty ? item.path : '',
+                              );
+                              cartItems.remove(item);
+                              cartBloc.add(AddToCartEvent(cartItemModel));
+                              Navigator.of(context).pop();
+                            }
+                          }
 
-                    // Si le produit n'existe pas déjà dans le panier, l'ajouter
-                    if (!alreadyExists) {
-                      CartItemModel cartItemModel = CartItemModel(
-                        id: widget.product.id.toString(),
-                        name: widget.product.name,
-                        price: widget.product.price,
-                        unity: "",
-                        quantity: _currentNumber,
-                        path: widget.product.path,
-                      );
-                      cartBloc.add(AddToCartEvent(cartItemModel));
-                      Navigator.pop(context);
-                    }
-
-                  },
-                  textSubmit: "Ajouter",
-                ) :
-                    const SizedBox()
+                          // Si le produit n'existe pas déjà dans le panier, l'ajouter
+                          if (!alreadyExists) {
+                            CartItemModel cartItemModel = CartItemModel(
+                              id: widget.product.id.toString(),
+                              name: widget.product.name,
+                              price: widget.product.price,
+                              unity: "",
+                              quantity: _currentNumber,
+                              path: widget.product.path,
+                            );
+                            cartBloc.add(AddToCartEvent(cartItemModel));
+                            Navigator.pop(context);
+                          }
+                        },
+                        textSubmit: "Ajouter",
+                      )
+                    : const SizedBox()
               ],
             ),
           )
-    // AJOUTER  PRODUITS TISSUS
+        // AJOUTER  PRODUITS TISSUS
         : Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -258,7 +257,9 @@ class _ProductCounterState extends State<ProductCounter> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 30.0, vertical: 10),
@@ -277,7 +278,6 @@ class _ProductCounterState extends State<ProductCounter> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-
                               _currentNumber > 0
                                   ? _currentNumber -= 0.5
                                   : _currentNumber = 0;
@@ -321,7 +321,9 @@ class _ProductCounterState extends State<ProductCounter> {
                   backgroundColor: const Color(0xFFB5C1CC),
                   textColor: const Color(0xFFFFFFFF),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -341,56 +343,59 @@ class _ProductCounterState extends State<ProductCounter> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
-                _currentNumber > 0 ?
-                SubmitButtonCustom(
-                  onPressed: () {
-                    // Vérifier si le produit est déjà dans le panier
-                    final cartBloc = context.read<CartBloc>();
-                    final currentState = cartBloc.state;
-                    final cartItems = currentState.cartItems;
-                    bool alreadyExists = false;
-                    for (var item in cartItems) {
-                      if (item.id.toString() == widget.product.id.toString()) {
-                        alreadyExists = true;
-                        item.quantity += _currentNumber; // Mise à jour de la quantité
-                        CartItemModel cartItemModel = CartItemModel(
-                          id: item.id.toString(),
-                          name: item.name,
-                          price: item.price,
-                          unity: unity.toString().isNotEmpty ? unity : "Mètre",
-                          quantity: item.quantity,
-                          path: item.path,
-                        );
-                        cartItems.remove(item);
-                        cartBloc.add(AddToCartEvent(cartItemModel));
+                const SizedBox(
+                  height: 10,
+                ),
+                _currentNumber > 0
+                    ? SubmitButtonCustom(
+                        onPressed: () {
+                          // Vérifier si le produit est déjà dans le panier
+                          final cartBloc = context.read<CartBloc>();
+                          final currentState = cartBloc.state;
+                          final cartItems = currentState.cartItems;
+                          bool alreadyExists = false;
+                          for (var item in cartItems) {
+                            if (item.id.toString() ==
+                                widget.product.id.toString()) {
+                              alreadyExists = true;
+                              item.quantity +=
+                                  _currentNumber; // Mise à jour de la quantité
+                              CartItemModel cartItemModel = CartItemModel(
+                                id: item.id.toString(),
+                                name: item.name,
+                                price: item.price,
+                                unity: unity.toString().isNotEmpty
+                                    ? unity
+                                    : "Mètre",
+                                quantity: item.quantity,
+                                path: item.path,
+                              );
+                              cartItems.remove(item);
+                              cartBloc.add(AddToCartEvent(cartItemModel));
 
-                        Navigator.of(context).pop();
-                      }
-                    }
-                    // Si le produit n'existe pas déjà dans le panier, l'ajouter
-                    if (!alreadyExists) {
-                      CartItemModel cartItemModel = CartItemModel(
-                        id: widget.product.id.toString(),
-                        name: widget.product.name,
-                        price: widget.product.price,
-                        unity: unity.toString().isNotEmpty ? unity : "Mètre",
-                        quantity: _currentNumber,
-                        path: widget.product.path,
-                      );
-                      cartBloc.add(AddToCartEvent(cartItemModel));
-                    }
-                    Navigator.pop(context);
-                  },
-                  textSubmit: "Ajouter",
-                ) :
-                    SizedBox(),
-
+                              Navigator.of(context).pop();
+                            }
+                          }
+                          // Si le produit n'existe pas déjà dans le panier, l'ajouter
+                          if (!alreadyExists) {
+                            CartItemModel cartItemModel = CartItemModel(
+                              id: widget.product.id.toString(),
+                              name: widget.product.name,
+                              price: widget.product.price,
+                              unity:
+                                  unity.toString().isNotEmpty ? unity : "Mètre",
+                              quantity: _currentNumber,
+                              path: widget.product.path,
+                            );
+                            cartBloc.add(AddToCartEvent(cartItemModel));
+                          }
+                          Navigator.pop(context);
+                        },
+                        textSubmit: "Ajouter",
+                      )
+                    : SizedBox(),
               ],
             ),
           );
   }
 }
-
-
-

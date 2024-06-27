@@ -16,6 +16,7 @@ import '../../feactures/products/presentation/widget/product_command.dart';
 import '../../feactures/products/presentation/widget/product_edite.dart';
 import '../../core/common/widgets/change_password.dart';
 import '../../feactures/seller/presentation/screens/historique_seller_screen.dart';
+import '../../feactures/seller/presentation/screens/wave_web_view_screen.dart';
 import '../../feactures/supervisor/presentation/screens/historique_supervisor_screen.dart';
 import '../../feactures/supervisor/presentation/screens/supervisor_screen.dart';
 
@@ -50,6 +51,13 @@ class AppRouter {
       case '/onboardingScreen':
         return MaterialPageRoute(
             builder: (_) => const OnboardingScreen());
+      case '/waveWebViewScreen':
+        if (arguments != null && arguments is Map<String, dynamic>) {
+          String url = arguments['url'];
+          return MaterialPageRoute(
+            builder: (_) => WaveWebViewScreen(url: url,),
+          );
+        }
 
       case '/adminScreen':
         return MaterialPageRoute(

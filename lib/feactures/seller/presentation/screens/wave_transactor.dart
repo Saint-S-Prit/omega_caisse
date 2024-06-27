@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:omega_caisse/feactures/seller/presentation/screens/wave_web_view_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../../../core/common/widgets/CustomSnackBar.dart';
 import '../../../../core/common/widgets/input_custom.dart';
 import '../../../../core/common/widgets/submit_button_custom.dart';
@@ -51,10 +53,15 @@ class _WaveTransactorState extends State<WaveTransactor> {
               listener: (context, state) async {
                 if (state is PaymentWaveLoaderState) {
                   if (state.paymentResponse.success) {
-                    callOption.openApp(state.paymentResponse.data!.url.toString());
+                    //print("GOOD");
+                    //callOption.openApp(state.paymentResponse.data!.url.toString());
                     //callOption.openUrl(state.paymentResponse.data!.url.toString());
+                    //openUrl(state.paymentResponse.data!.url.toString());
+                    //const WhatsappWeb();
+                    Navigator.of(context).pushNamed("/waveWebViewScreen", arguments: {"url": state.paymentResponse.data!.url.toString()});
+
                     // Fermer l'application après le lancement de l'URL
-                    SystemNavigator.pop();
+                    //SystemNavigator.pop();
                   } else {
                     CustomSnackBar.show(context, 'une erreur est survenue, veuillez réessayer !', Colors.red);
                   }
@@ -68,14 +75,6 @@ class _WaveTransactorState extends State<WaveTransactor> {
                   key: formKey,
                   child: Column(
                     children: [
-                      // SizedBox(
-                      //   child: Image.asset(
-                      //     "assets/logo.png",
-                      //     height: 200,
-                      //     width: 200,
-                      //   ),
-                      // ),
-                      // const SizedBox(height: 50,),
                       InputCustom(
                         keyboardType: TextInputType.number,
                         controller: phoneNumber,
@@ -130,33 +129,16 @@ class _WaveTransactorState extends State<WaveTransactor> {
       ),
     );
   }
-
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
-}
 
-class PlatformChannel {
-  static const MethodChannel _instance = MethodChannel('platform_channel');
 
-  static Future<void> launchApp(String packageName) async {
-    try {
-      await _instance.invokeMethod('launchApp', {'packageName': packageName});
-    } on PlatformException catch (e) {
-      print("Error launching app: '${e.message}'.");
-    }
-  }
-
-  static Future<void> exitApp() async {
-    try {
-      await _instance.invokeMethod('exitApp');
-    } on PlatformException catch (e) {
-      print("Error exiting app: '${e.message}'.");
-    }
+Future<void> openUrl(String url) async {
+  final _url = Uri.parse(url);
+  if (!await launchUrl(_url, mode: LaunchMode.platformDefault)) { // <--
+    throw Exception('Could not launch $_url');
   }
 }
+
+
+

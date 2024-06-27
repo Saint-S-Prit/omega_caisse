@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,18 @@ class _ProductInvoiceState extends State<ProductInvoice> {
   }
 
   BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
+  final utf8Encoder = utf8.encoder;
   bool _connected = false;
   BluetoothDevice? _device;
   String tips = 'no device connect';
+
+
+
+
+
+
+
+
 
   @override
   void initState() {
@@ -127,11 +137,42 @@ class _ProductInvoiceState extends State<ProductInvoice> {
     await prefs.remove('savedDeviceAddress');
   }
 
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd/MM/yyyy').format(now);
     String formattedTime = DateFormat('HH:mm:ss').format(now);
+
+
+
+
+    String replaceSpecialChars(String text) {
+      Map<String, String> charMap = {
+        'é': 'e',
+        'è': 'e',
+        'ê': 'e',
+        'à': 'a',
+        'ç': 'c',
+        'ô': 'o',
+        // Ajoutez d'autres remplacements nécessaires
+      };
+
+      charMap.forEach((key, value) {
+        text = text.replaceAll(key, value);
+      });
+
+      return text;
+    }
+
+
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -241,193 +282,140 @@ class _ProductInvoiceState extends State<ProductInvoice> {
                                                 ),
                                                 onPressed: _connected
                                                     ? () async {
-                                                        Map<String, dynamic>
-                                                            config = {};
-                                                        config['width'] =
-                                                            100; // Largeur de l'étiquette, en mm
-                                                        config['gap'] =
-                                                            2; // Espace entre les étiquettes, en mm
 
-                                                        // Largeur totale de l'étiquette en dpi (100 mm * 8 dpi)
-                                                        int labelWidthDpi =
-                                                            100 * 8;
 
-                                                        String header =
-                                                            "RECU DE CAISSE";
-                                                        int textWidth = header
-                                                                .length *
-                                                            8; // Approximativement 8 dpi par caractère
+                                                  // A FORMATER (CREER FONCTION)
+                                                  Map<String, dynamic> config = {};
+                                                  config['width'] = 100; // Largeur de l'étiquette, en mm
+                                                  config['gap'] = 2; // Espace entre les étiquettes, en mm
 
-                                                        int xPosition =
-                                                            (labelWidthDpi -
-                                                                    textWidth) ~/
-                                                                7;
+                                                  // Largeur totale de l'étiquette en dpi (100 mm * 8 dpi)
+                                                  int labelWidthDpi = 100 * 8;
 
-                                                        // Position x, y en dpi, 1mm=8dpi
-                                                        List<LineText> lines =
-                                                            [];
-                                                        lines.add(
-                                                          LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            y: 10,
-                                                            content: header,
-                                                            x: xPosition,
-                                                            size: 35,
-                                                            weight: 5,
-                                                          ),
-                                                        );
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 70,
-                                                            content:
-                                                                '                           '));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 30,
-                                                            content:
-                                                                '$fullName'));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 30,
-                                                            content:
-                                                                'Adresse: $address'));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 50,
-                                                            content:
-                                                                'Tel: $phone'));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 70,
-                                                            content:
-                                                                '-----------------------------'));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: 90,
-                                                            content:
-                                                                'Date: $formattedDate $formattedTime'));
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: 10,
-                                                              y: 130,
-                                                              content:
-                                                                  '----------------------------'));
+                                                  String header = replaceSpecialChars("REÇU DE CAISSE");
+                                                  int textWidth = header.length * 8; // Approximativement 8 dpi par caractère
+                                                  int xPosition = (labelWidthDpi - textWidth) ~/ 7;
 
-                                                          int yPosition =
-                                                              170; // Initial y position for items
-                                                          for (var cartItem
-                                                              in state
-                                                                  .cartItems) {
-                                                            lines.add(LineText(
-                                                              type: LineText
-                                                                  .TYPE_TEXT,
-                                                              x: 10,
-                                                              y: yPosition,
-                                                              content:
-                                                                  '${cartItem.quantity}${cartItem.unity ?? null}x${cartItem.name}',
-                                                            ));
+                                                  List<LineText> lines = [];
+                                                  lines.add(
+                                                    LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      y: 10,
+                                                      content: utf8.decode(utf8.encode(header)),
+                                                      x: xPosition,
+                                                      size: 35,
+                                                      weight: 5,
+                                                    ),
+                                                  );
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 70,
+                                                    content: ' ',
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 30,
+                                                    content: utf8.decode(utf8.encode(replaceSpecialChars(fullName.toString()))),
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 30,
+                                                    content: utf8.decode(utf8.encode(replaceSpecialChars('Adresse: $address'))),
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 50,
+                                                    content: utf8.decode(utf8.encode(replaceSpecialChars('Tel: $phone'))),
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 70,
+                                                    content: '-----------------------------',
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 90,
+                                                    content: 'Date: $formattedDate $formattedTime',
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: 130,
+                                                    content: '----------------------------',
+                                                  ));
 
-                                                            int pricePositionX =
-                                                                labelWidthDpi -
-                                                                    140; // Ajustez 140 selon les besoins
+                                                  int yPosition = 170; // Initial y position for items
+                                                  for (var cartItem in state.cartItems) {
+                                                    lines.add(LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      x: 10,
+                                                      y: yPosition,
+                                                      content: utf8.decode(utf8.encode(replaceSpecialChars('${cartItem.quantity}${cartItem.unity ?? ''}x${cartItem.name}'))),
+                                                    ));
 
-                                                            lines.add(LineText(
-                                                              type: LineText
-                                                                  .TYPE_TEXT,
-                                                              x: pricePositionX,
-                                                              y: yPosition,
-                                                              content:
-                                                                  '${Validation.formatBalance(cartItem.price * cartItem.quantity)} XOF',
-                                                            ));
+                                                    int pricePositionX = labelWidthDpi - 140; // Ajustez 140 selon les besoins
 
-                                                            yPosition +=
-                                                                20; // Increment y position for next item
-                                                          }
+                                                    lines.add(LineText(
+                                                      type: LineText.TYPE_TEXT,
+                                                      x: pricePositionX,
+                                                      y: yPosition,
+                                                      content: utf8.decode(utf8.encode('${Validation.formatBalance(cartItem.price * cartItem.quantity)} XOF')),
+                                                    ));
 
-                                                          lines.add(LineText(
-                                                              type: LineText
-                                                                  .TYPE_TEXT,
-                                                              x: 10,
-                                                              y: yPosition,
-                                                              content:
-                                                                  '---------------------------'));
+                                                    yPosition += 20; // Increment y position for next item
+                                                  }
 
-                                                          yPosition +=
-                                                              20; // Increment y position for total
-                                                          num total = state
-                                                              .cartItems
-                                                              .fold(
-                                                                  0,
-                                                                  (sum, item) =>
-                                                                      sum +
-                                                                      (item.price *
-                                                                          item.quantity),);
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: yPosition,
+                                                    content: '---------------------------',
+                                                  ));
+                                                  yPosition += 20; // Increment y position for total
+                                                  num total = state.cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 
-                                                          lines.add(
-                                                                                                      LineText(
-                                                              type: LineText
-                                                                      .TYPE_TEXT,
-                                                            x: 10,
-                                                            y: yPosition,
-                                                            weight: 5,
-                                                            content: 'Total:'));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: yPosition,
+                                                    weight: 5,
+                                                    content: 'Total:',
+                                                  ));
 
-                                                        int totalPositionX =
-                                                            labelWidthDpi -
-                                                                170; // Ajustez 140 selon les besoins
+                                                  int totalPositionX = labelWidthDpi - 170; // Ajustez 140 selon les besoins
 
-                                                        lines.add(LineText(
-                                                            type: LineText
-                                                                .TYPE_TEXT,
-                                                            x: totalPositionX,
-                                                            y: yPosition,
-                                                            weight: 5,
-                                                            content:
-                                                                '${Validation.formatBalance(total)} XOF'));
-                                                        lines.add(
-                                                          LineText(
-                                                              type: LineText
-                                                                  .TYPE_TEXT,
-                                                              x: 10,
-                                                              y: yPosition + 20,
-                                                              content:
-                                                                  '                           '),
-                                                        );
-                                                        lines.add(
-                                                          LineText(
-                                                              type: LineText
-                                                                  .TYPE_TEXT,
-                                                              x: 10,
-                                                              y: yPosition + 40,
-                                                              content:
-                                                                  '                           '),
-                                                        );
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: totalPositionX,
+                                                    y: yPosition,
+                                                    weight: 5,
+                                                    content: utf8.decode(utf8.encode('${Validation.formatBalance(total)} XOF')),
+                                                  ));
 
-                                                        bool result =
-                                                            await bluetoothPrint
-                                                                .printLabel(
-                                                                    config,
-                                                                    lines);
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: yPosition + 20,
+                                                    content: ' ',
+                                                  ));
+                                                  lines.add(LineText(
+                                                    type: LineText.TYPE_TEXT,
+                                                    x: 10,
+                                                    y: yPosition + 40,
+                                                    content: ' ',
+                                                  ));
 
-                                                        setState(() {
-                                                          tips = result
-                                                              ? 'Impression réussie'
-                                                              : 'Échec de l\'impression';
-                                                        });
+                                                  bool result = await bluetoothPrint.printLabel(config, lines);
+
+                                                  setState(() {
+                                                    tips = result ? 'Impression réussie' : 'Échec de l\'impression';
+                                                  });
                                                       }
                                                     : null,
                                                 child: const Text(
@@ -466,6 +454,8 @@ class _ProductInvoiceState extends State<ProductInvoice> {
       ),
     );
   }
+
+
 
   // Widget builds the display item with the proper formatting to display the user's info
   Widget buildInvoiceDisplay(
@@ -522,4 +512,14 @@ class _ProductInvoiceState extends State<ProductInvoice> {
               )
             ],
           ));
+
+
+
+
 }
+
+
+
+
+
+

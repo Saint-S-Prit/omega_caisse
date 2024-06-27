@@ -13,9 +13,6 @@ class LocalStorageSecurity {
 
 
 
-
-
-
   Future<void> saveAuthPhone(String phone) async {
     await _storage.write(key: _authPhone, value: phone);
   }

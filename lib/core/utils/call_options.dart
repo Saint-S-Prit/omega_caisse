@@ -4,13 +4,18 @@ import 'package:url_launcher/url_launcher.dart';
 class CallOption {
   // function whatsap
   whatsAppOrCall(String phoneNumber) async {
-    // Essayez d'ouvrir WhatsApp
-    //bool openedWhatsApp = await whatsApp(phoneNumber);
-    bool openedWhatsApp = await whatsApp(phoneNumber);
-    // Si WhatsApp n'est pas ouvert, effectuez un appel téléphonique
-    if (!openedWhatsApp) {
+    try {
+      bool openedWhatsApp = await whatsApp(phoneNumber);
+      if (!openedWhatsApp) {
+        // Si l'application spécifique n'est pas lancée, ouvrir l'URL dans le navigateur
+        await makePhoneCall(phoneNumber);
+      }
+    } catch (e) {
+      print('Erreur lors du lancement de l\'application : $e');
+      // En cas d'erreur, ouvrir l'URL dans le navigateur
       await makePhoneCall(phoneNumber);
     }
+
   }
 
 // Fonction pour ouvrir WhatsApp

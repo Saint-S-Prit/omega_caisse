@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../feactures/products/data/product_model.dart';
 
 class SharedPreferencesService {
   static late SharedPreferences _preferences;
@@ -11,6 +15,22 @@ class SharedPreferencesService {
 
   static Future<void> setFirstOpenAppStorage(String firstOpenAppStorage) async {
     await _preferences.setString("firstOpenAppStorage", firstOpenAppStorage);
+  }
+
+
+  static Future<void> setProducts(List<ProductModel> products) async {
+    final String encodedData = jsonEncode(
+      products.map((product) => product.toJson()).toList(),
+    );
+    await _preferences.setString('products', encodedData);
+  }
+
+  static List<ProductModel>? getProducts() {
+    final String? productsString = _preferences.getString('products');
+    if (productsString == null) return null;
+
+    final List<dynamic> decodedData = jsonDecode(productsString);
+    return decodedData.map((json) => ProductModel.fromJson(json)).toList();
   }
 
   static String? getId() => _preferences.getString("id");
@@ -30,6 +50,7 @@ class SharedPreferencesService {
   static Future<void> setPhoneNumber(String phoneNumber) async {
     await _preferences.setString("phoneNumber", phoneNumber);
   }
+
 
 
   static String? getProfile() => _preferences.getString("profile");
@@ -97,9 +118,6 @@ class SharedPreferencesService {
     await _preferences.setString("address", address);
   }
 
-
-
-
   static Future<void> clearOtp() async {
     await _preferences.remove("otp");
   }
@@ -110,19 +128,25 @@ class SharedPreferencesService {
     await _preferences.setString("dateSendOpt", dateSendOpt);
   }
 
-  // static Future<void> clearDateSendOpt() async {
-  //   await _preferences.remove("dateSendOpt");
-  // }
 
+  static Future<void> setLastCheckDate(String date) async {
+    await _preferences.setString("lastCheckDate", date);
+  }
 
+  static String? getLastCheckDate() {
+    return _preferences.getString("lastCheckDate");
+  }
 
   static Future<void> clearAllExceptFirstOpenAppStorage() async {
     final firstOpenAppStorage = getFirstOpenAppStorage(); // Conserver la valeur de firstOpenAppStorage
     final imagePath = getImagePathForProfile(); // Conserver la valeur de firstOpenAppStorage
+    //final lastLogoutDate = getLastLogoutDate(); // Conserver la valeur de firstOpenAppStorage
     await _preferences.clear(); // Effacer toutes les données
-    if (firstOpenAppStorage != null && imagePath != null ) {
+    //if (firstOpenAppStorage != null && imagePath != null && lastLogoutDate != null) {
+    if (firstOpenAppStorage != null && imagePath != null) {
       await setFirstOpenAppStorage(firstOpenAppStorage); // Restaurer la valeur de firstOpenAppStorage
       await setImagePathForProfile(imagePath); // Restaurer la valeur de imagePath
+      //await setLastLogoutDate(lastLogoutDate); // Restaurer la valeur de lastLogoutDate
     }
   }
 }

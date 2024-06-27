@@ -366,6 +366,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               await SharedPreferencesService.clearAllExceptFirstOpenAppStorage();
                               cartState.cartItems.clear();
                               Navigator.of(context).pushNamedAndRemoveUntil('/loginScreen', (Route<dynamic> route) => false);
+
                             },
                             child: Column(
                               children: [

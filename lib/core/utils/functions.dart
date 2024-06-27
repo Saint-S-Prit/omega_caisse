@@ -27,8 +27,6 @@ class Functions {
   static String getTodayRange() {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day, 5, 0); // Aujourd'hui à 5h00
-    print(startOfDay.toString());
-
     return startOfDay.toString();
   }
 
