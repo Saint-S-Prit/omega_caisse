@@ -4,6 +4,7 @@ import 'package:omega_caisse/feactures/seller/presentation/bloc/payment/payment_
 import 'package:omega_caisse/feactures/seller/presentation/bloc/payment/payment_state.dart';
 import '../../../../core/common/widgets/input_custom.dart';
 import '../../../../core/common/widgets/submit_button_custom.dart';
+import '../../../../core/services/subscription/subscription_service.dart';
 import '../../../../core/utils/styles/color.dart';
 import '../../../products/presentation/screens/home_screen.dart';
 import '../bloc/payment/payment_event.dart';
@@ -24,6 +25,7 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
   Widget build(BuildContext context) {
 
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    //final SubscriptionService subscriptionService = SubscriptionService();
 
     return BlocProvider(
       create: (context) => PaymentBloc(),
@@ -33,12 +35,13 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
           child: BlocListener<PaymentBloc, PaymentState>(
             listener: (context, state) async {
               if (state is PaymentOrangeLoaderState) {
-                if (state.paymentResponse["success"] == true) {
+                //if (state.paymentResponse["success"] == true) {
+                if (state.paymentResponse["test"] == true) {
                   showSuccessDialog(
                     context,
                     'Succès',
                     state.paymentResponse["message"].toString(),
-                    const HomeScreen(), // Remplacez par le widget de votre écran d'accueil
+                     //subscriptionService.login(context); // Remplacez par le widget de votre écran d'accueil
                   );
                 } else {
                   showErrorDialog(
@@ -152,7 +155,7 @@ class _OrangeTransactorState extends State<OrangeTransactor> {
   }
 }
 
-void showSuccessDialog(BuildContext context, String title, String description, Widget redirectTo) {
+void showSuccessDialog(BuildContext context, String title, String description) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -163,11 +166,8 @@ void showSuccessDialog(BuildContext context, String title, String description, W
           TextButton(
             child: const Text('OK'),
             onPressed: () {
-              Navigator.of(context).pop(); // Fermer le popup
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => redirectTo), // Rediriger vers l'écran spécifié
-              );
+              //Navigator.of(context).pop(); // Fermer le popup
+              SubscriptionService().login(context);
             },
           ),
         ],

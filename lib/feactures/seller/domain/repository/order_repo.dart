@@ -14,12 +14,9 @@ class OrderRepository {
     required Map<String, dynamic> variableMap,
   }) async {
 
-    // print("000000000000");
-    // print(variableMap);
-    // print("000000000000");
-
 
     var uri = Uri.https(baseUrl, "/api/orders");
+    //print(uri);
     //var token = await localStorageSecurity.getToken(); // Remplacez cela par la façon dont vous obtenez le jeton
     var response = await http.post(
       uri,
@@ -29,10 +26,6 @@ class OrderRepository {
         'Authorization': 'Bearer $token', // Ajouter le jeton à l'en-tête Authorization
       },
     );
-
-    // print("wwwwwwww");
-    // print(response.statusCode);
-    // print("wwwwwwww");
 
 
     if (response.statusCode == 200) {

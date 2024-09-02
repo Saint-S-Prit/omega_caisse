@@ -52,6 +52,10 @@ class Functions {
     return startOfMonth.toString();
   }
 
+
+
+
+
   static String getMonthRangeGetMonthName() {
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1); // Premier jour du mois sans heure

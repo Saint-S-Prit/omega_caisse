@@ -62,7 +62,7 @@ class _ProductCounterState extends State<ProductCounter> {
   late TextEditingController _numberController;
   late num _currentNumber;
   String? category;
-  String? unity = "Mètre";
+  String? unity = "mètre";
   int _toggleValue = 0;
   bool isMeterSelected = false;
   bool isYardSelected = false;
@@ -314,7 +314,7 @@ class _ProductCounterState extends State<ProductCounter> {
                   onToggleCallback: (value) {
                     setState(() {
                       _toggleValue = value;
-                      value == 0 ? unity = "Mètre" : unity = "Yard";
+                      value == 0 ? unity = "mètre" : unity = "yard";
                     });
                   },
                   buttonColor: const Color(0xFF0A3157),
@@ -383,7 +383,7 @@ class _ProductCounterState extends State<ProductCounter> {
                               name: widget.product.name,
                               price: widget.product.price,
                               unity:
-                                  unity.toString().isNotEmpty ? unity : "Mètre",
+                                  unity.toString().isNotEmpty ? unity : "mètre",
                               quantity: _currentNumber,
                               path: widget.product.path,
                             );
@@ -393,7 +393,7 @@ class _ProductCounterState extends State<ProductCounter> {
                         },
                         textSubmit: "Ajouter",
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
           );

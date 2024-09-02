@@ -31,9 +31,10 @@ class SupervisorRepository {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> dataList = responseBody['data'];
 
-
       final List<SupervisorModel> teamLists =
           dataList.map((json) => SupervisorModel.fromJson(json)).toList();
+
+
       supervisorTeamList = teamLists;
     }
 
@@ -82,7 +83,6 @@ class SupervisorRepository {
 // Construire l'URL avec les dates formatées
 
     var url = Uri.https(baseUrl, '/api/user/$id/orders/$formattedStartDate/$formattedEndDate');
-    //var url = Uri.https(baseUrl, "https://omega.hadjidoro.me/api/user/2/orders/2024-05-26-04:59:59/2024-05-26-22:49:59");
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -91,19 +91,14 @@ class SupervisorRepository {
         "Authorization": "Bearer $token",
       },
     );
+
     if (response.statusCode == 200) {
-      print("zzzzzzzzzz");
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> dataList = responseBody['data'];
-
-      print(dataList);
-
       final List<HistoryModel> historyModelList =
-       await  dataList.map((json) => HistoryModel.fromJson(json)).toList();
-
+       dataList.map((json) => HistoryModel.fromJson(json)).toList();
       supervisorGetHistoryTeamList = historyModelList;
 
-      print(historyModelList.length);
     }
     return supervisorGetHistoryTeamList;
 

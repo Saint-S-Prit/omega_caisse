@@ -6,6 +6,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:omega_caisse/feactures/products/presentation/widget/product_add.dart';
 import 'package:omega_caisse/feactures/products/presentation/widget/product_app_bar.dart';
 import 'package:omega_caisse/feactures/products/presentation/widget/product_card.dart';
+import '../../../../core/common/widgets/CustomSnackBar.dart';
 import '../../../../core/common/widgets/input_custom.dart';
 import '../../../../core/services/storage/SharedPreferencesService.dart';
 import '../../../../core/services/subscription/subscription_service.dart';
@@ -15,6 +16,7 @@ import '../../../../core/utils/functions.dart';
 import '../../../../core/utils/styles/color.dart';
 import '../../../../core/utils/styles/typo.dart';
 import '../../../../core/utils/validation.dart';
+import '../../../Seller/presentation/screens/payment_screen.dart';
 import '../../../authentication/presentation/bloc/logout/logout_bloc.dart';
 import '../../../authentication/presentation/bloc/logout/logout_event.dart';
 import '../../../seller/presentation/bloc/order/order_bloc.dart';
@@ -290,29 +292,97 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               } else {
                                 return GestureDetector(
                                   onTap: () async {
-                                    await subscriptionService
-                                        .checkAndUpdateSubscriptionStatus(
-                                            context);
-                                    // Appeler la fonction pour vérifier l'heure et déconnecter si nécessaire
-                                    //await checkTimeAndLogout(context);
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled:
-                                          true, // Permet au contenu de prendre autant de place que nécessaire
-                                      builder: (_) {
-                                        return SizedBox(
-                                          // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
-                                          //height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
-                                          child: ProductAdd(
-                                            product: productModelNullValue,
-                                          ),
-                                        );
-                                      },
-                                    );
+                                    bool update = await subscriptionService.checkAndUpdateSubscriptionStatus(context);
+                                    if (!update) {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+                                        builder: (_) {
+                                          return SizedBox(
+                                            // Vous pouvez également utiliser un autre conteneur comme Scaffold si nécessaire
+                                            //height: MediaQuery.of(context).size.height * 0.4, // Définir la hauteur souhaitée
+                                            child: ProductAdd(
+                                              product: productModelNullValue,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else if (SharedPreferencesService.getIsNotified() == "true") {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            icon: const Icon(IconData(0xe0b2, fontFamily: 'MaterialIcons')),
+                                            title: const Text('Payez votre abonnement'),
+                                            content: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      text: 'Nous vous remercions de bien vouloir effectuer le paiement de votre abonnement avant ',
+                                                      style: const TextStyle(color: Colors.black), // Style par défaut pour le texte
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text: 'le 5 ${Functions.getMonthRangeGetMonthName().toString()}',
+                                                          style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold), // Style pour la partie en rouge
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pour espacer les boutons
+                                                children: [
+                                                  ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: appPrincipalColor, // Couleur du bouton
+                                                    ),
+                                                    child: const Text(
+                                                      "Payez maintenant",
+                                                      style: TextStyle(color: Colors.white, fontSize: 12), // Couleur du texte
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                      showModalBottomSheet(
+                                                        context: context,
+                                                        isScrollControlled: true, // Permet au contenu de prendre autant de place que nécessaire
+                                                        builder: (_) {
+                                                          return const SizedBox(
+                                                              child: PaymentScreen());
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: appWarning, // Couleur du bouton
+                                                    ),
+                                                    child: const Text(
+                                                      "Plus tard",
+                                                      style: TextStyle(color: Colors.white, fontSize: 12), // Couleur du texte
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(); // Close the dialog
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      const SizedBox();
+                                      // Si la condition n'est pas remplie, ne faites rien ou affichez un autre widget
+                                    }
                                   },
                                   child: Container(
-                                    decoration:
-                                        TextStyles.customBoxDecoration(context),
+                                    decoration: TextStyles.customBoxDecoration(context),
                                     child: Column(
                                       children: [
                                         SizedBox(
@@ -328,18 +398,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                           child: Container(
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.only(
+                                              borderRadius: const BorderRadius.only(
                                                 bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10),
+                                                bottomRight: Radius.circular(10),
                                               ),
                                               color: appSecondaryColor,
                                             ),
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                               child: Column(
                                                 children: [
                                                   Text(
@@ -349,8 +415,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                       fontSize: 16,
                                                     ),
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ],
                                               ),
@@ -361,6 +426,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     ),
                                   ),
                                 );
+
                               }
                             },
                           ),
@@ -408,6 +474,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
+                                            //print("zzzzzzzzzzzzzzzzzzzzzz-----------");
                                             final Map<String, dynamic>
                                                 variableMap = {
                                               "detail":
@@ -420,6 +487,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                             context.read<OrderBloc>().add(
                                                 OrderLoadedEvent(
                                                     variableMap: variableMap));
+
+
                                             Navigator.of(context)
                                                 .pushNamed("/productInvoice");
                                           },

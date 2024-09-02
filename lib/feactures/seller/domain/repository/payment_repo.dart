@@ -76,16 +76,13 @@ try {
 
       //final response = await get(Uri.parse('$baseUrl/professions'));
       if (response.statusCode == 200) {
-        print("********ééééééé************");
-        print(response.body);
-        print("**********éééééé**********");
 
 
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
 
-        print("*****responseBody******");
-        print(responseBody);
-        print("*****responseBody******");
+        // print("*****responseBody******");
+        // print(responseBody);
+        // print("*****responseBody******");
 
         //PaymentModel paymentResponses = PaymentModel.fromJson(responseBody);
 

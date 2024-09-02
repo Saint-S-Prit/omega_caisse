@@ -95,11 +95,6 @@ class _ProductInvoiceState extends State<ProductInvoice> {
       String? savedDeviceAddress = prefs.getString('savedDeviceAddress');
 
       if (savedDeviceAddress != null) {
-        // List<BluetoothDevice> devices = await bluetoothPrint.scanResults.first;
-        // BluetoothDevice? savedDevice = devices.firstWhere(
-        //       (device) => device.address == savedDeviceAddress,
-        //   orElse: () => null,
-        // );
         List<BluetoothDevice> devices = await bluetoothPrint.scanResults.first;
         BluetoothDevice? savedDevice;
         try {
@@ -292,7 +287,7 @@ class _ProductInvoiceState extends State<ProductInvoice> {
                                                   // Largeur totale de l'étiquette en dpi (100 mm * 8 dpi)
                                                   int labelWidthDpi = 100 * 8;
 
-                                                  String header = replaceSpecialChars("REÇU DE CAISSE");
+                                                  String header = replaceSpecialChars("reçu de caisse").toUpperCase();
                                                   int textWidth = header.length * 8; // Approximativement 8 dpi par caractère
                                                   int xPosition = (labelWidthDpi - textWidth) ~/ 7;
 

@@ -12,25 +12,7 @@ List<ProductModel> productList = [];
 
 class ProductRepository {
   String token = SharedPreferencesService.getToken().toString();
-  // Future<List<ProductModel>> getProductsByClient({required String id}) async {
-  //   var url = Uri.https(baseUrl, '/api/user/$id/products');
-  //   var headers = {'Authorization': 'Bearer $token'};
-  //
-  //   var response = await http.get(
-  //     url,
-  //     headers: headers,
-  //   );
-  //   //final response = await get(Uri.parse('$baseUrl/professions'));
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseBody = jsonDecode(response.body);
-  //     final List<dynamic> dataList = responseBody['data'];
-  //     final List<ProductModel> products =
-  //         dataList.map((json) => ProductModel.fromJson(json)).toList();
-  //
-  //     productList = products;
-  //   }
-  //   return productList;
-  // }
+
   Future<List<ProductModel>> getProductsByClient({required String id}) async {
     // Vérifiez si les produits sont déjà enregistrés dans le stockage local
     List<ProductModel>? cachedProducts = SharedPreferencesService.getProducts();
@@ -63,10 +45,15 @@ class ProductRepository {
     return [];
   }
 
-  Future<bool> updateProduct({required ProductModel productModel}) async {
 
-    var url = Uri.https(baseUrl, '/api/products/${productModel.id.toString()}');
-    var headers = {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};
+
+
+  Future<bool> updateProduct({required ProductModel productModel}) async {
+    var url = Uri.https(baseUrl, '/api/products/${productModel.id}');
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
 
     var productJson = {
       "id": productModel.id,
@@ -74,18 +61,27 @@ class ProductRepository {
       "price": productModel.price,
       "path": productModel.path,
       "description": productModel.description,
-    }; // Convertir productModel en JSON
+    };
 
     var response = await http.put(
       url,
-      body: jsonEncode(productJson), // Envoyer le JSON dans le corps de la requête
+      body: jsonEncode(productJson),
       headers: headers,
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      final bool responseMessage = responseBody['success'];
-      return responseMessage;
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['success']) {
+        // Update the product in local storage
+        List<ProductModel> products = SharedPreferencesService.getProducts() ?? [];
+        int index = products.indexWhere((p) => p.id == productModel.id);
+        if (index != -1) {
+          products[index].name = productModel.name;
+          products[index].price = productModel.price;
+          await SharedPreferencesService.setProducts(products);
+        }
+        return true;
+      }
     }
 
     return false;

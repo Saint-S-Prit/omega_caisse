@@ -7,11 +7,11 @@ import '../storage/SharedPreferencesService.dart';
 
 class SubscriptionService {
 
-  Future<void> checkAndUpdateSubscriptionStatus(BuildContext context) async {
+  Future<bool> checkAndUpdateSubscriptionStatus(BuildContext context) async {
+    bool update = false;
     String? lastCheckDateStr = SharedPreferencesService.getLastCheckDate();
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
-
 
     if (lastCheckDateStr != null) {
       DateTime lastCheckDate = DateTime.parse(lastCheckDateStr);
@@ -20,19 +20,21 @@ class SubscriptionService {
       // Si la date d'aujourd'hui est différente de la dernière date de vérification
       if (lastCheckDay != today) {
         print("---------------login---------------");
-        await _login(context);
+        await login(context);
         await SharedPreferencesService.setLastCheckDate(now.toIso8601String());
+        update =  true;
       }
     } else {
       print("---------------login---------------");
-      await _login(context);
+      await login(context);
       await SharedPreferencesService.setLastCheckDate(now.toIso8601String());
+      update =  true;
     }
-    print("---------------NO login---------------");
+    return update;
 
   }
 
-  Future<void> _login(BuildContext context) async {
+  Future<void> login(BuildContext context) async {
     var headers = {'Content-Type': 'application/json'};
     var url = Uri.https(baseUrl, '/api/login');
 
@@ -43,10 +45,14 @@ class SubscriptionService {
 
     http.Response response = await http.post(url, body: jsonEncode(body), headers: headers);
 
+    print("response.statusCode");
+    print(response.statusCode);
+    print("response.statusCode");
+
+
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       final user = jsonResponse['data'];
-
       await SharedPreferencesService.setId(user['id'].toString());
       await SharedPreferencesService.setPassword(SharedPreferencesService.getPassword().toString());
       await SharedPreferencesService.setToken(user['token'].toString());
@@ -58,7 +64,6 @@ class SubscriptionService {
       await SharedPreferencesService.setCategory(user['category']['label'].toString());
       await SharedPreferencesService.setIsSubscribed(user['suscription']['is_subscribed'].toString());
       await SharedPreferencesService.setIsNotified(user['suscription']['is_notified'].toString());
-
       Navigator.of(context).pushNamed("/homeScreen");
     } else {
       Navigator.of(context).pushNamed("/loginScreen");

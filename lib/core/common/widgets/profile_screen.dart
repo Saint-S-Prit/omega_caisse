@@ -228,7 +228,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   GestureDetector(
                     onTap: () {
-
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled:
@@ -290,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: appPrincipalColor,
                           ),
                           title: const Text(
-                            "Payement",
+                            "Paiement",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),

@@ -16,82 +16,149 @@ class HistoryRepository  {
 
 
 
-  Future<List<HistoryModel>?> getOrders(
-    {
-      String? startDay,
-        String? endDay,
-      required id,
-      required token,
-      }) async {
+  Future<List<HistoryModel>?> getOrders({
+    String? startDay,
+    String? endDay,
+    required  id,
+    required  token,
+  }) async {
+    // Obtenez la date et l'heure actuelles
+    DateTime now = DateTime.now();
 
-    var day = Validation.formatDateYYYMMdd(DateTime.now());
-    TimeOfDay now = TimeOfDay.now();
+    // Format de la date 'YYYY-MM-DD'
+    String day = Validation.formatDateYYYMMdd(now);
 
-    TimeOfDay releaseTime = const TimeOfDay(hour: 4, minute: 59);
+    // Obtenez l'heure actuelle
+    TimeOfDay currentTime = TimeOfDay.now();
 
-    var h = now.hour > 10 ? now.hour : "0${now.hour}";
-    var m = now.minute > 10 ? now.minute : "0${now.minute}";
+    // Définissez l'heure de libération à 06:00 AM
+    TimeOfDay releaseTime = const TimeOfDay(hour: 6, minute: 0);
 
-    var endDate = "$day $h:$m:59";
+    // Formatez les heures et les minutes pour assurer qu'elles ont toujours deux chiffres
+    String formattedHour = currentTime.hour.toString().padLeft(2, '0');
+    String formattedMinute = currentTime.minute.toString().padLeft(2, '0');
 
-    var startDate = '';
-    if (now.hour < 4) {
-      var day1 = Validation.formatDateYYYMMdd(DateTime.now().subtract(const Duration(days: 1)));
-      var h1 =
-      releaseTime.hour > 10 ? releaseTime.hour : "0${releaseTime.hour}";
+    // Définissez la date de fin à l'heure actuelle
+    String endDate = "$day $formattedHour:$formattedMinute:59";
 
-      startDate = "$day1 $h1:${releaseTime.minute}:59";
+    // Déterminez la date de début en fonction de l'heure actuelle
+    String startDate;
+    if (currentTime.hour < releaseTime.hour) {
+      // Si l'heure actuelle est avant 06:00 AM, utilisez le jour précédent
+      DateTime previousDay = now.subtract(const Duration(days: 1));
+      String previousDayFormatted = Validation.formatDateYYYMMdd(previousDay);
+      startDate = "$previousDayFormatted ${releaseTime.hour.toString().padLeft(2, '0')}:${releaseTime.minute.toString().padLeft(2, '0')}:00";
     } else {
-      var h2 =
-      releaseTime.hour > 10 ? releaseTime.hour : "0${releaseTime.hour}";
-      startDate = "$day $h2:${releaseTime.minute}:59";
+      // Sinon, utilisez la date d'aujourd'hui à 06:00 AM
+      startDate = "$day ${releaseTime.hour.toString().padLeft(2, '0')}:${releaseTime.minute.toString().padLeft(2, '0')}:00";
     }
-// Remplacer les caractères spéciaux par des tirets (-)
+
+    // Remplacez les caractères spéciaux dans les dates par des tirets
     String formattedStartDate = startDate.replaceAll(RegExp(r'[^\w\s]'), '-');
     String formattedEndDate = endDate.replaceAll(RegExp(r'[^\w\s]'), '-');
 
-// Construire l'URL avec les dates formatées
+    // Construisez l'URL avec les dates formatées
     var url = Uri.https(baseUrl, '/api/user/$id/orders/$formattedStartDate/$formattedEndDate');
+
+    // Effectuez la requête HTTP GET
     var response = await http.get(
       url,
-        headers: <String, String>{
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Authorization": "Bearer $token",
-        },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $token",
+      },
     );
 
-    // http.Response response = await http.get(
-    //   Uri.parse('$baseUrl/api/user/$id/orders/$startDate/$endDate'),
-    //   headers: <String, String>{
-    //     "Content-Type": "application/json",
-    //     "X-Requested-With": "XMLHttpRequest",
-    //     "Authorization": "Bearer $token",
-    //   },
-    // );
-
-
-    //print(response.statusCode);
+    // Si la réponse est réussie (code 200)
     if (response.statusCode == 200) {
-
+      // Décodez le corps de la réponse JSON
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+      // Récupérez la liste des données
       final List<dynamic> dataList = responseBody['data'];
-      //print(dataList);
 
-      final List<HistoryModel> historyModelList =
-      dataList.map((json) => HistoryModel.fromJson(json)).toList();
+      // Convertissez chaque élément de la liste de données en HistoryModel
+      final List<HistoryModel> historyModelList = dataList.map((json) => HistoryModel.fromJson(json)).toList();
 
-
-      //print("àààààààà");
-      //print(historyModelList.first.datetime.toString());
-
-      historyModelLists = historyModelList;
-
+      // Retournez la liste des modèles d'historique
+      return historyModelList;
+    } else {
+      // Si la réponse n'est pas réussie, retournez null
+      return null;
     }
-
-    return historyModelLists;
-
   }
+
+
+
+//   Future<List<HistoryModel>?> getOrders(
+//     {
+//       String? startDay,
+//         String? endDay,
+//       required id,
+//       required token,
+//       }) async {
+//
+//     var day = Validation.formatDateYYYMMdd(DateTime.now());
+//     TimeOfDay now = TimeOfDay.now();
+//
+//     TimeOfDay releaseTime = const TimeOfDay(hour: 5, minute: 00);
+//
+//     var h = now.hour > 10 ? now.hour : "0${now.hour}";
+//     var m = now.minute > 10 ? now.minute : "0${now.minute}";
+//
+//     var endDate = "$day $h:$m:59";
+//
+//     var startDate = '';
+//     if (now.hour < 5) {
+//       var day1 = Validation.formatDateYYYMMdd(DateTime.now().subtract(const Duration(days: 1)));
+//       var h1 =
+//       releaseTime.hour > 10 ? releaseTime.hour : "0${releaseTime.hour}";
+//
+//       startDate = "$day1 $h1:${releaseTime.minute}:59";
+//     } else {
+//       var h2 =
+//       releaseTime.hour > 10 ? releaseTime.hour : "0${releaseTime.hour}";
+//       startDate = "$day $h2:${releaseTime.minute}:59";
+//     }
+// // Remplacer les caractères spéciaux par des tirets (-)
+//     String formattedStartDate = startDate.replaceAll(RegExp(r'[^\w\s]'), '-');
+//     String formattedEndDate = endDate.replaceAll(RegExp(r'[^\w\s]'), '-');
+//
+// // Construire l'URL avec les dates formatées
+//     var url = Uri.https(baseUrl, '/api/user/$id/orders/$formattedStartDate/$formattedEndDate');
+//     var response = await http.get(
+//       url,
+//         headers: <String, String>{
+//           "Content-Type": "application/json",
+//           "X-Requested-With": "XMLHttpRequest",
+//           "Authorization": "Bearer $token",
+//         },
+//     );
+//
+//
+//
+//     //print(response.statusCode);
+//     if (response.statusCode == 200) {
+//
+//       final Map<String, dynamic> responseBody = jsonDecode(response.body);
+//       final List<dynamic> dataList = responseBody['data'];
+//       //print(dataList);
+//
+//       final List<HistoryModel> historyModelList =
+//       dataList.map((json) => HistoryModel.fromJson(json)).toList();
+//
+//
+//       //print("àààààààà");
+//       //print(historyModelList.first.datetime.toString());
+//
+//       historyModelLists = historyModelList;
+//
+//     }
+//
+//     return historyModelLists;
+//
+//   }
 
 }
 

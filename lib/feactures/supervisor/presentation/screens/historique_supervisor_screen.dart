@@ -15,6 +15,7 @@ import '../../../../core/utils/styles/typo.dart';
 import '../../../../core/utils/validation.dart';
 import '../../../seller/data/model/history_model.dart';
 import '../../../seller/presentation/bloc/history/history_state.dart';
+import '../../domain/repository/supervisor_repo.dart';
 import '../bloc/supervisor_bloc.dart';
 import '../bloc/supervisor_event.dart';
 import '../bloc/supervisor_state.dart';
@@ -79,7 +80,9 @@ class _HistoriesSupervisorScreenState extends State<HistoriesSupervisorScreen> {
         child: MultiBlocProvider(
           providers: [
             BlocProvider<SupervisorBloc>(
-              create: (BuildContext context) => SupervisorBloc()
+              create: (BuildContext context) => SupervisorBloc(supervisorRepository: SupervisorRepository())
+
+
                 ..add(SupervisorGetHistoryTeamEvent(
                     id: widget.idSeller, token: widget.token, startDay: '', endDay: '')),
             ),
@@ -95,7 +98,7 @@ class _HistoriesSupervisorScreenState extends State<HistoriesSupervisorScreen> {
                 );
               }
               if (state is HistoryErrorState) {
-                return const Text("erreur");
+                return const Center(child: Text("Une erreur est survenue"));
               }
               if (state is SupervisorGetHistoryTeamState) {
                 List<HistoryModel> supervisorGetHistoryTeamList =

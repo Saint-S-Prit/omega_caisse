@@ -1,18 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:omega_caisse/feactures/supervisor/presentation/bloc/supervisor_event.dart';
 import 'package:omega_caisse/feactures/supervisor/presentation/bloc/supervisor_state.dart';
-
+import '../../data/supervisor_model.dart';
 import '../../domain/repository/supervisor_repo.dart';
 
-
-
 class SupervisorBloc extends Bloc<SupervisorEvent, SupervisorState> {
-  SupervisorBloc() : super(SupervisorLoadingState()) {
+  final SupervisorRepository supervisorRepository;
+
+  SupervisorBloc({required this.supervisorRepository}) : super(SupervisorLoadingState()) {
     on<SupervisorEvent>((event, emit) async {
       if (event is SupervisorGetTeamEvent) {
         emit(SupervisorLoadingState());
         try {
-          final supervisorTeamList = await SupervisorRepository().getSupervisorTeamList();
+          final supervisorTeamList = await supervisorRepository.getSupervisorTeamList();
           emit(SupervisorStateLoadedState(supervisorTeamList));
         } catch (e) {
           emit(SupervisorErrorState(e.toString()));
@@ -20,7 +20,7 @@ class SupervisorBloc extends Bloc<SupervisorEvent, SupervisorState> {
       } else if (event is SupervisorGetHistoryTeamEvent) {
         emit(SupervisorLoadingState());
         try {
-          final supervisorGetHistoryTeamList = await SupervisorRepository().getOrdersItemTeam(
+          final supervisorGetHistoryTeamList = await supervisorRepository.getOrdersItemTeam(
             id: event.id,
             token: event.token,
             startDay: event.startDay,

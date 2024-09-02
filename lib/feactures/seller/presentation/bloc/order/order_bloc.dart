@@ -12,8 +12,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       if (event is OrderLoadedEvent) {
         emit(OrderLoadingState());
         try {
-          final order = await OrderRepository().createOrder(variableMap: event.variableMap
-          );
+          print(event.variableMap);
+          final order = await OrderRepository().createOrder(variableMap: event.variableMap);
+          print("order");
+          print(order);
+          print("order");
           emit(OrderLoadedState(order));
         } catch (e) {
           emit(OrderErrorState(e.toString()));

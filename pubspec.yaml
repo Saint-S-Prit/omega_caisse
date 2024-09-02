@@ -182,3 +182,6 @@ flutter_icons:
   image_path: "assets/icon/logo.jpeg"
   android: true
   ios: true
+
+
+  #flutter build appbundle --build-name 1.0.0+6 --build-number 12

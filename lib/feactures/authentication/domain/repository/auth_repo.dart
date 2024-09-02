@@ -7,7 +7,6 @@ import '../../../../core/utils/constants/api_path.dart';
 import '../../../../core/utils/format.dart';
 
 
-final localStorageSecurity = LocalStorageSecurity();
 
 class AuthenticationRepository {
 
@@ -34,7 +33,6 @@ class AuthenticationRepository {
         // Décoder les données utilisateur
         //final user = UserResponse.fromJson(jsonResponse);
         final user = jsonResponse['data'];
-
 
         await SharedPreferencesService.setId(user['id'].toString());
         await SharedPreferencesService.setPassword(password);
@@ -153,48 +151,47 @@ class AuthenticationRepository {
       return  responseBody['message'];
     }
   }
-
-  Future<String> getBalanceClient(
-      {
-        required int id,
-        String? startDay,
-        String? endDay,
-      }) async {
+  Future<String> getBalanceClient({
+    required int id,
+    String? startDay,
+    String? endDay,
+  }) async {
     if (startDay != null && endDay != null) {
+      // Si des dates de début et de fin sont fournies, utilisez-les pour construire l'URL
       var url = Uri.https(baseUrl, '/api/user/$id/balance/$startDay/$endDay');
       var headers = {'Authorization': 'Bearer $token'};
-      var response = await http.get(
-        url,
-        headers: headers,
-      );
+      var response = await http.get(url, headers: headers);
       var body = jsonDecode(response.body);
       return body['balance'];
     } else {
+      // Obtenez la date actuelle au format YYYY-MM-DD
       var day = Format.formatDate2(DateTime.now());
       TimeOfDay now = TimeOfDay.now();
-      TimeOfDay releaseTime = const TimeOfDay(hour: 6, minute: 00);
+      TimeOfDay releaseTime = const TimeOfDay(hour: 6, minute: 0);
 
-      var endDate = "$day ${now.hour}:${now.minute}}";
+      // Définissez endDate à l'heure actuelle plus une minute
+      var endDate = "$day ${now.hour}:${now.minute + 1}";
+
       var startDate = '';
 
-
-
-
+      // Si l'heure actuelle est avant 6 heures du matin, utilisez la date d'hier à 6 heures du matin
       if (now.hour < 6) {
         var day1 = Format.formatDate2(DateTime.now().subtract(const Duration(days: 1)));
         startDate = "$day1 ${releaseTime.hour}:${releaseTime.minute}";
       } else {
+        // Sinon, utilisez la date d'aujourd'hui à 6 heures du matin
         startDate = "$day ${releaseTime.hour}:${releaseTime.minute}";
       }
 
+      // Construisez l'URL en utilisant startDate et endDate
       var url = Uri.https(baseUrl, '/api/user/$id/balance/$startDate/$endDate');
       var headers = {'Authorization': 'Bearer $token'};
-      var response = await http.get(
-        url,
-        headers: headers,
-      );
+      var response = await http.get(url, headers: headers);
       var body = jsonDecode(response.body);
+
+      // Retournez le solde
       return body['balance'].toString();
     }
   }
+
 }

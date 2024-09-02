@@ -12,6 +12,9 @@ class SoldBloc extends Bloc<SoldEvent, SoldState> {
         try {
           final sold = await AuthenticationRepository().getBalanceClient(id: event.id
           );
+          print("sold");
+          print(sold);
+          print("sold");
           emit(SoldClientLoadedState(sold));
         } catch (e) {
           emit(SoldErrorState(e.toString()));

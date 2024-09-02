@@ -151,7 +151,7 @@ class _ProductEditeState extends State<ProductEdite> {
                               priceProductController.clear();
                             }
                           },
-                          textSubmit: 'Editer',
+                          textSubmit: 'Modifier',
                           isLoading: false,
                         );
                       }

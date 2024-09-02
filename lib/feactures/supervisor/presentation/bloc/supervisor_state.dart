@@ -13,6 +13,7 @@ class SupervisorLoadingState extends SupervisorState {
 
 class SupervisorStateLoadedState extends SupervisorState {
   final List<SupervisorModel> supervisorTeamsList;
+
   SupervisorStateLoadedState(this.supervisorTeamsList);
   @override
   List<Object> get props => [supervisorTeamsList];

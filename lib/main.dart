@@ -26,6 +26,7 @@ import 'feactures/products/presentation/bloc/solde/product_bloc.dart';
 import 'feactures/seller/presentation/bloc/history/history_bloc.dart';
 import 'feactures/seller/presentation/bloc/order/order_bloc.dart';
 import 'feactures/seller/presentation/bloc/payment/payment_bloc.dart';
+import 'feactures/supervisor/domain/repository/supervisor_repo.dart';
 import 'feactures/supervisor/presentation/bloc/supervisor_bloc.dart';
 
 void main() async {
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<SoldBloc>(create: (BuildContext context) => SoldBloc()),
         BlocProvider<HistoryBloc>(create: (BuildContext context) => HistoryBloc()),
         BlocProvider<OrderBloc>(create: (BuildContext context) => OrderBloc()),
-        BlocProvider<SupervisorBloc>(create: (BuildContext context) => SupervisorBloc()),
+        BlocProvider<SupervisorBloc>(create: (BuildContext context) => SupervisorBloc(supervisorRepository: SupervisorRepository())),
         BlocProvider<HandlePasswordBloc>(create: (BuildContext context) => HandlePasswordBloc()),
         BlocProvider<PaymentBloc>(create: (BuildContext context) => PaymentBloc()),
       ],
